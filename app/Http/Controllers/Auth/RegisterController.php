@@ -31,16 +31,16 @@ class RegisterController extends Controller
      * @var string
      */
     protected $redirectTo = '/home';
-    protected $users;
+    protected $user;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(User $users)
+    public function __construct(User $user)
     {
-        $this->users = $users;
+        $this->user = $user;
         $this->middleware('guest');
     }
 
@@ -60,25 +60,6 @@ class RegisterController extends Controller
         ]);
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return User
-     */
-    protected function create(array $data)
-    {
-        return $this->users->create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-            'phone' => $data['phone'],
-            'gender' => $data['gender'],
-            'address' => $data['address'],
-            'confirmation_code' => $data['confirmation_code'],
-        ]);
-    }
-
     public function register(Request $request)
     {
         $this->validator($request->all())->validate();
@@ -90,7 +71,8 @@ class RegisterController extends Controller
         $data = [
             'confirmationCode' => $request->confirmation_code,
         ];
-        event(new Registered($user = $this->create($request->all())));
+        
+        $this->user->createUser($request->all());
 
         Mail::send('auth.verify_email', $data, function ($message) use ($request) {
             $message->to($request->email, $request->name)
@@ -103,12 +85,12 @@ class RegisterController extends Controller
     public function confirmEmail($confirmationCode)
     {
         if (!$confirmationCode) {
-            return redirect('/')->with('status', trans('authentication.incorrect_url'));
+            return redirect()->action('HomeController@index')->with('status', trans('authentication.incorrect_url'));
         }
-        $user = $this->users->getUserbyConfirmationCode($confirmationCode);
+        $user = $this->user->getUserbyConfirmationCode($confirmationCode);
 
         if (!$user) {
-            return redirect('/')->with('status', trans('authentication.invalid_code'));
+            return redirect()->action('HomeController@index')->with('status', trans('authentication.invalid_code'));
         }
 
         $user->status = config('user.activated_user_status');
@@ -117,6 +99,6 @@ class RegisterController extends Controller
 
         $this->guard()->login($user);
 
-        return redirect('home')->with('status', trans('authentication.verify_success'));
+        return redirect()->action('HomeController@index')->with('status', trans('authentication.verify_success'));
     }
 }

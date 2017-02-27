@@ -12,7 +12,7 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                    {!! Form::open(['url' => url('/register'), 'method' => 'POST', 'class' => 'form-horizontal']) !!}
+                    {!! Form::open(['action' => 'Auth\RegisterController@register', 'method' => 'POST', 'class' => 'form-horizontal']) !!}
 
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                             {!! Form::label('name', trans('authentication.name'), ['class' => 'col-md-4 control-label']) !!}

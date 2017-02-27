@@ -35,6 +35,6 @@ return [
     'invalid_code' => 'This confirmation code is invalid',
     'verify_success' => 'You have successfully verified your account.',
     'verify_email_title' => 'Verify Your Email Address',
-    'verify_email_body' => 'Thanks for creating an account with us. <br/> Please follow the link below to verify your email address',
+    'verify_email_body' => 'Thanks for creating an account with us. Please follow the link below to verify your email address',
 
 ];

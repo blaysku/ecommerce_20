@@ -6,8 +6,8 @@
 <body>
     <h2>{{ trans('authentication.verify_email_title') }}</h2>  
         <div>
-            {{ trans('authentication.verify_email_body') }}
-            {{ route('verify.email', $confirmationCode) }}.<br/>
+            {{ trans('authentication.verify_email_body') }} <br/>
+            {{ route('verify.email', $confirmationCode) }}
         </div>
 </body>
 </html>

@@ -9,6 +9,7 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    const USER_DEFAULT_AVATAR = 'avatar/default.jpg';
 
     /**
      * The attributes that are mass assignable.
@@ -31,23 +32,18 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected $defaultAvatar = 'avatar/default.jpg';
+    protected $attributes = [
+        'avatar' => self::USER_DEFAULT_AVATAR,
+    ];
 
-    public function __construct($attributes = [])
+    public function setAvatarAttribute($avatar)
     {
-        $this->setAvatarAttribute($this->defaultAvatar);
-        parent::__construct($attributes);
+        $this->attributes['avatar'] = $avatar;
     }
 
-    /**
-     * Set the user's avatar.
-     *
-     * @param    string  $value
-     * @return  void
-     */
-    public function setAvatarAttribute($value)
+    public function setPasswordAttribute($pass)
     {
-        $this->attributes['avatar'] = strtolower($value);
+        $this->attributes['password'] = bcrypt($pass);
     }
 
     public function suggests()
@@ -70,4 +66,16 @@ class User extends Authenticatable
         return $this->whereConfirmationCode($confirmationCode)->first();
     }
 
+    public function createUser(array $data)
+    {
+        return $this->create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => $data['password'],
+            'phone' => $data['phone'],
+            'gender' => $data['gender'],
+            'address' => $data['address'],
+            'confirmation_code' => $data['confirmation_code'],
+        ]);
+    }
 }

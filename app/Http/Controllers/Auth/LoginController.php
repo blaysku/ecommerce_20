@@ -48,7 +48,7 @@ class LoginController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'username' => 'required',
+            'email' => 'required',
             'password' => 'required',
         ]);
     }

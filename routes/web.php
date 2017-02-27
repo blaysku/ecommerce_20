@@ -14,3 +14,9 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('register/verify/{confirmationCode}', 'Auth\RegisterController@confirmEmail')->name('verify.email');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index');

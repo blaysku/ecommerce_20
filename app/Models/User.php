@@ -9,22 +9,16 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'gender',
-        'avatar',
-        'phone',
-        'address',
-        'introduce',
-        'status',
-        'is_admin',
+    protected $guarded = [
+        'id',
+        'created_at',
+        'updated_at',
     ];
 
     /**
@@ -36,6 +30,25 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    protected $defaultAvatar = 'avatar/default.jpg';
+
+    public function __construct($attributes = [])
+    {
+        $this->setAvatarAttribute($this->defaultAvatar);
+        parent::__construct($attributes);
+    }
+
+    /**
+     * Set the user's avatar.
+     *
+     * @param    string  $value
+     * @return  void
+     */
+    public function setAvatarAttribute($value)
+    {
+        $this->attributes['avatar'] = strtolower($value);
+    }
 
     public function suggests()
     {
@@ -51,4 +64,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
+
+    public function getUserByConfirmationCode($confirmationCode)
+    {
+        return $this->whereConfirmationCode($confirmationCode)->first();
+    }
+
 }

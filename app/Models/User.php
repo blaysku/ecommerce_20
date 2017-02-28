@@ -66,16 +66,8 @@ class User extends Authenticatable
         return $this->whereConfirmationCode($confirmationCode)->first();
     }
 
-    public function createUser(array $data)
+    public function isAdmin()
     {
-        return $this->create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => $data['password'],
-            'phone' => $data['phone'],
-            'gender' => $data['gender'],
-            'address' => $data['address'],
-            'confirmation_code' => $data['confirmation_code'],
-        ]);
+        return $this->is_admin;
     }
 }

@@ -60,6 +60,12 @@ class RegisterController extends Controller
         ]);
     }
 
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function register(Request $request)
     {
         $this->validator($request->all())->validate();
@@ -72,7 +78,15 @@ class RegisterController extends Controller
             'confirmationCode' => $request->confirmation_code,
         ];
         
-        $this->user->createUser($request->all());
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password,
+            'phone' => $request->phone,
+            'gender' => $request->gender,
+            'address' => $request->address,
+            'confirmation_code' => $request->confirmation_code,
+        ]);
 
         Mail::send('auth.verify_email', $data, function ($message) use ($request) {
             $message->to($request->email, $request->name)
@@ -82,6 +96,12 @@ class RegisterController extends Controller
         return redirect()->back()->with('status', trans('authentication.check_mail'));
     }
 
+    /**
+     * Confirm user email before active account
+     *
+     * @param  $confirmationCode
+     * @return mix
+     */
     public function confirmEmail($confirmationCode)
     {
         if (!$confirmationCode) {

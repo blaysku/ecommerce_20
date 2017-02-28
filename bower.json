@@ -1,0 +1,23 @@
+{
+  "name": "Ecommerce",
+  "description": "Ecommerce",
+  "main": "",
+  "authors": [
+    "Nguyen Van Ngoc <ngocnguyencnttk35@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/blaysku/ecommerce_20",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "font-awesome": "^4.7.0",
+    "sweetalert": "^1.1.3"
+  }
+}

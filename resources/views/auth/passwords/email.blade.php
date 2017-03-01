@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    {!! Form::open(['class' => 'form-horizontal', 'method' => 'POST', 'url' => url('/password/email')]) !!}
+                    {!! Form::open(['class' => 'form-horizontal', 'method' => 'POST', 'action' => 'Auth\ForgotPasswordController@sendResetLinkEmail']) !!}
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                             {!! Form::label('email', trans('authentication.email'), ['class' => 'col-md-4 control-label']) !!}

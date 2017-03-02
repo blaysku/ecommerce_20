@@ -7,8 +7,8 @@
         </ul>
     </div>
 @endif
-@if (session('status'))
-    <div class="alert alert-success">
-        {{ session('status') }}
+@if (session('message'))
+    <div class="alert alert-{{ (session('level')) ? session('level') : 'success' }}">
+        {{ session('message') }}
     </div>
 @endif

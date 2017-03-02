@@ -113,7 +113,7 @@ class RegisterController extends Controller
             return redirect()->action('HomeController@index')->with('status', trans('authentication.invalid_code'));
         }
 
-        $user->status = config('user.activated_user_status');
+        $user->status = config('setting.activated_user_status');
         $user->confirmation_code = null;
         $user->save();
 

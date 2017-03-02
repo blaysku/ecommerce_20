@@ -231,3 +231,8 @@ ul.alert-dropdown {
     bottom: 0;
     width: 100%;
 }
+
+.badge {
+    padding: 1px 8px 1px;
+    background-color: #aaa !important;
+}

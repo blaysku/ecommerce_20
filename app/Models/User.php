@@ -9,7 +9,7 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    const USER_DEFAULT_AVATAR = 'avatar/default.jpg';
+    const USER_DEFAULT_AVATAR = 'public/avatars/default.jpg';
 
     /**
      * The attributes that are mass assignable.
@@ -83,7 +83,7 @@ class User extends Authenticatable
 
     public function getUserByRole($role = null, $n = null)
     {
-        $query = $this->oldest('status');
+        $query = $this->oldest('status')->latest();
 
         if ($role == config('setting.admin')) {
             $query->whereIsAdmin(config('setting.admin_permission'));

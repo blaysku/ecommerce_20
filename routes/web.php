@@ -22,7 +22,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index');
 
 Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
-    Route::get('user/{role?}', 'UserController@index')->where('role', '[a-z]+')->name('user.index');
+    Route::get('user/{role?}', 'UserController@index')->where('role', config('setting.admin'))->name('user.index');
     Route::put('user/changestatus/{id}', 'UserController@changeStatusWithAjax')->name('user.status');
     Route::resource('user', 'UserController', ['except' => 'index']);
 });

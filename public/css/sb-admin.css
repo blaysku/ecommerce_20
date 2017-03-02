@@ -236,3 +236,8 @@ ul.alert-dropdown {
     padding: 1px 8px 1px;
     background-color: #aaa !important;
 }
+
+.image .img-responsive {
+    margin: 0 auto;
+    padding-bottom: 5px;
+}

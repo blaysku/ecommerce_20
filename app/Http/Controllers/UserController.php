@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Http\Requests\UserCreateRequest;
+use App\Http\Requests\UserUpdateRequest;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -33,7 +36,25 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.users.create');
+    }
+
+    protected function uploadAvatar($request)
+    {
+        if ($request->hasFile('avatar')) {
+            $file = $request->file('avatar');
+            $fileName = $file->getClientOriginalName();
+
+            if (Storage::exists(config('setting.avatars_folder') . $fileName)) {
+                $fileName = md5(time()) . $fileName;
+            }
+
+            $avatar = $file->storeAs(config('setting.avatars_folder'), $fileName);
+
+            return $avatar;
+        }
+
+        return null;
     }
 
     /**
@@ -42,9 +63,25 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserCreateRequest $request)
     {
-        //
+        $avatar = $this->uploadAvatar($request);
+        $input = $request->all();
+
+        if (!isset($avatar)) {
+            unset($input['avatar']);
+        }
+
+        $input['avatar'] = $avatar;
+        $input['status'] = isset($input['status']) ? config('setting.activated_user_status') : config('setting.not_activated_user_status');
+
+        $user = $this->user->create($input);
+
+        if ($user) {
+            return redirect()->route('user.show', $user->id)->with('message', trans('admin.user.created'));
+        }
+
+        return redirect()->back()->with(['message' => trans('admin.main.error'), 'level' => 'danger']);
     }
 
     /**
@@ -55,7 +92,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = $this->user->findOrFail($id);
+
+        return view('admin.users.show', compact('user'));
     }
 
     /**
@@ -66,7 +105,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = $this->user->findOrFail($id);
+
+        return view('admin.users.edit', compact('user'));
     }
 
     /**
@@ -76,9 +117,30 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UserUpdateRequest $request, $id)
     {
-        //
+        $user = $this->user->findOrFail($id);
+        $avatar = $this->uploadAvatar($request);
+        $input = $request->all();
+
+        if (!isset($avatar)) {
+            unset($input['avatar']);
+        }
+
+        $input['avatar'] = $avatar;
+
+        if ($avatar != config('setting.default_avatar')) {
+            Storage::delete($user->avatar);
+        }
+
+        if ($input['password'] == '') {
+            unset($input['password']);
+        }
+
+        $input['status'] = isset($input['status']) ? config('setting.activated_user_status') : config('setting.not_activated_user_status');
+        $user->update($input);
+
+        return redirect()->route('user.show', $user->id)->with('message', trans('admin.user.updated'));
     }
 
     /**

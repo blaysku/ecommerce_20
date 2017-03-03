@@ -15,7 +15,7 @@ class AdminPermission
      */
     public function handle($request, Closure $next)
     {
-        if (auth()->user() && auth()->user()->isAdmin() == config('user.admin_permission')) {
+        if (auth()->user() && auth()->user()->isAdmin() == config('setting.admin_permission')) {
             return $next($request);
         }
         return redirect()->action('HomeController@index');

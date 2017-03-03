@@ -70,4 +70,25 @@ class User extends Authenticatable
     {
         return $this->is_admin;
     }
+
+    public function countUser()
+    {
+        $counts = [
+            'total' => $this->count(),
+            config('setting.admin') => $this->whereIsAdmin(config('setting.admin_permission'))->count(),
+        ];
+
+        return $counts;
+    }
+
+    public function getUserByRole($role = null, $n = null)
+    {
+        $query = $this->oldest('status');
+
+        if ($role == config('setting.admin')) {
+            $query->whereIsAdmin(config('setting.admin_permission'));
+        }
+
+        return $query->paginate($n ? $n : config('setting.pagination_limit'));
+    }
 }

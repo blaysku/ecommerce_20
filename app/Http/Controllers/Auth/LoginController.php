@@ -71,7 +71,7 @@ class LoginController extends Controller
             return $this->sendLockoutResponse($request);
         }
 
-        $request->merge(['status' => config('user.activated_user_status')]);
+        $request->merge(['status' => config('setting.activated_user_status')]);
 
         if ($this->guard()->attempt($request->only($this->username(), 'password', 'status'), $request->has('remember'))) {
             return $this->sendLoginResponse($request);

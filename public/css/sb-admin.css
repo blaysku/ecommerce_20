@@ -241,3 +241,6 @@ ul.alert-dropdown {
     margin: 0 auto;
     padding-bottom: 5px;
 }
+.branch a .fa {
+    margin: 0 2px 0 2px;
+}

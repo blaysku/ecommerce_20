@@ -25,4 +25,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::get('user/{role?}', 'UserController@index')->where('role', config('setting.admin'))->name('user.index');
     Route::put('user/changestatus/{id}', 'UserController@changeStatusWithAjax')->name('user.status');
     Route::resource('user', 'UserController', ['except' => 'index']);
+
+    Route::resource('category', 'CategoryController', ['except' => ['show', 'create']]);
 });

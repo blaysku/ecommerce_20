@@ -68,11 +68,10 @@ class UserController extends Controller
         $avatar = $this->uploadAvatar($request);
         $input = $request->all();
 
-        if (!isset($avatar)) {
-            unset($input['avatar']);
+        if (isset($avatar)) {
+            $input['avatar'] = $avatar;
         }
 
-        $input['avatar'] = $avatar;
         $input['status'] = isset($input['status']) ? config('setting.activated_user_status') : config('setting.not_activated_user_status');
 
         $user = $this->user->create($input);
@@ -122,14 +121,13 @@ class UserController extends Controller
         $user = $this->user->findOrFail($id);
         $avatar = $this->uploadAvatar($request);
         $input = $request->all();
+        $input['avatar'] = $avatar;
 
         if (!isset($avatar)) {
             unset($input['avatar']);
         }
 
-        $input['avatar'] = $avatar;
-
-        if ($avatar != config('setting.default_avatar')) {
+        if ($input['avatar'] != config('setting.default_avatar')) {
             Storage::delete($user->avatar);
         }
 

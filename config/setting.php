@@ -12,5 +12,5 @@ return [
     'female' => '0',
     'male' => '1',
     'other_gender' => '2',
-
+    'rootcategory' => 0,
 ];

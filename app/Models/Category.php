@@ -31,4 +31,22 @@ class Category extends Model
     {
         return $this->hasMany(Suggest::class);
     }
+
+    public function rootCategories()
+    {
+        return $this->whereParentId(config('setting.rootcategory'))->get();
+    }
+
+    public function getProductsThroughChildrens($id)
+    {
+        $category = Category::findOrFail($id);
+        if (count($category->childrens)) {
+            return Product::whereHas('category', function ($query) use ($id) {
+                $query->whereHas('parent', function ($query) use ($id) {
+                    $query->whereId($id);
+                });
+            });
+        }
+        return null;
+    }
 }

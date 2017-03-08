@@ -30,4 +30,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
 
     Route::put('product/trending/{id}', 'ProductController@changTrendingAjax')->name('product.trending');
     Route::resource('product', 'ProductController', ['except' => 'show']);
+
+    Route::put('order/change-status/{id}', 'OrderController@changeStatusWithAjax')->name('order.status');
+    Route::resource('order', 'OrderController', ['only' => ['index', 'show']]);
 });

@@ -244,3 +244,6 @@ ul.alert-dropdown {
 .branch a .fa {
     margin: 0 2px 0 2px;
 }
+.img-item {
+    max-width: 100px;
+}

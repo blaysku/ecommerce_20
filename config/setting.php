@@ -17,4 +17,9 @@ return [
     'rootcategory' => 0,
     'trending_product' => 1,
     'not_trending_product' => 0,
+    'waiting_order' => 0,
+    'done_order' => 1,
+    'cancel_order' => 2,
+    'currency_unit' => 1000,
+    'currency' => 'VND',
 ];

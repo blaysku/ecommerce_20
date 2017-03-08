@@ -6,11 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+    const PRODUCT_DEFAULT_IMAGE = 'public/images/default.jpg';
+
     protected $guarded = [
         'id',
         'created_at',
         'updated_at',
     ];
+
+    protected $attributes = [
+        'image' => self::PRODUCT_DEFAULT_IMAGE,
+    ];
+
+    public function setImageAttribute($image)
+    {
+        $this->attributes['image'] = $image;
+    }
 
     public function category()
     {

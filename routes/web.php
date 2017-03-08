@@ -27,4 +27,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::resource('user', 'UserController', ['except' => 'index']);
 
     Route::resource('category', 'CategoryController', ['except' => ['show', 'create']]);
+
+    Route::put('product/trending/{id}', 'ProductController@changTrendingAjax')->name('product.trending');
+    Route::resource('product', 'ProductController', ['except' => 'show']);
 });

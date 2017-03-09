@@ -33,4 +33,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
 
     Route::put('order/change-status/{id}', 'OrderController@changeStatusWithAjax')->name('order.status');
     Route::resource('order', 'OrderController', ['only' => ['index', 'show']]);
+
+    Route::post('suggest/reject/{id}', 'SuggestController@reject')->name('suggest.reject');
+    Route::post('suggest/accept/{id}', 'SuggestController@accept')->name('suggest.accept');
+    Route::resource('suggest', 'SuggestController', ['only' => ['index', 'show']]);
 });

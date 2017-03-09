@@ -39,3 +39,8 @@
         </div>
     </div>
 @endsection
+@section('js')
+    @parent
+    {{ HTML::script('bower_components/ckeditor/ckeditor.js') }}
+    {{ HTML::script('js/ckeditor.js') }}
+@endsection

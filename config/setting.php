@@ -3,8 +3,10 @@
 return [
     'avatars_folder' => 'public/avatars',
     'image_folder' => 'public/images',
+    'suggest_image_folder' => 'public/suggets',
     'default_avatar' => 'public/avatars/default.jpg',
     'default_image' => 'public/images/default.jpg',
+    'default_suggest_image' => 'public/suggests/default.jpg',
     'activated_user_status' => 1,
     'not_activated_user_status' => 0,
     'admin_permission' => 1,
@@ -22,4 +24,7 @@ return [
     'cancel_order' => 2,
     'currency_unit' => 1000,
     'currency' => 'VND',
+    'sugget_waiting' => 0,
+    'sugget_accept' => 1,
+    'sugget_reject' => 2,
 ];

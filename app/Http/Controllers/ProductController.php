@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Http\Requests\ProductCreateRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Suggest;
 
 class ProductController extends Controller
 {
@@ -79,7 +80,16 @@ class ProductController extends Controller
             }
 
             $input['is_trending'] = isset($input['is_trending']) ? config('setting.trending_product') : config('setting.not_trending_product');
+            unset($input['suggest']);
             $this->product->create($input);
+
+            if ($request->get('suggest')) {
+                $suggest = Suggest::findOrFail($request->get('suggest'));
+                $suggest->status = config('setting.sugget_accept');
+                $suggest->save();
+
+                return redirect()->route('suggest.index')->with('message', trans('admin.suggest.created'));
+            }
 
             return redirect()->route('product.index')->with('message', trans('admin.category.created'));
         } catch (Exception $e) {
@@ -122,9 +132,7 @@ class ProductController extends Controller
 
             if (!isset($image)) {
                 unset($input['image']);
-            }
-
-            if ($input['image'] != config('setting.default_image')) {
+            } elseif ($input['image'] != config('setting.default_image')) {
                 Storage::delete($product->image);
             }
 

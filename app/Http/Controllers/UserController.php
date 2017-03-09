@@ -45,7 +45,7 @@ class UserController extends Controller
             $file = $request->file('avatar');
             $fileName = $file->getClientOriginalName();
 
-            if (Storage::exists(config('setting.avatars_folder') . $fileName)) {
+            if (Storage::exists(config('setting.avatars_folder') . '/' . $fileName)) {
                 $fileName = md5(time()) . $fileName;
             }
 
@@ -125,9 +125,7 @@ class UserController extends Controller
 
         if (!isset($avatar)) {
             unset($input['avatar']);
-        }
-
-        if ($input['avatar'] != config('setting.default_avatar')) {
+        } elseif ($input['avatar'] != config('setting.default_avatar')) {
             Storage::delete($user->avatar);
         }
 

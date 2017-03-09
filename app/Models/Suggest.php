@@ -12,9 +12,9 @@ class Suggest extends Model
         'updated_at',
     ];
 
-    public function product()
+    public function category()
     {
-        return $this->hasOne(Product::class);
+        return $this->belongsTo(Category::class);
     }
 
     public function user()

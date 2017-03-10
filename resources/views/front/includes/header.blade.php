@@ -7,7 +7,6 @@
                         <li><a href="#"><i class="fa fa-user"></i> {{ trans('front.account.my-account') }}</a></li>
                         <li><a href="#"><i class="fa fa-heart"></i> {{ trans('front.account.wishlist') }}</a></li>
                         <li><a href="#"><i class="fa fa-user"></i> {{ trans('front.cart.my-cart') }}</a></li>
-                        <li><a href="#"><i class="fa fa-user"></i> {{ trans('front.account.login') }}</a></li>
                     </ul>
                 </div>
             </div>
@@ -20,6 +19,23 @@
                                 <li><a href="#">{{ trans('front.language.english') }}</a></li>
                                 <li><a href="#">{{ trans('front.language.vietnamese') }}</a></li>
                             </ul>
+                            @if (auth()->user())
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-user"></span> {{ auth()->user()->name }}<b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="{{ route('logout') }}" id="logout">
+                                                <span class="fa fa-fw fa-power-off"></span>
+                                                {{ trans('admin.main.logout') }}
+                                            </a>
+                                            {!! Form::open(['route' => 'logout', 'id' => 'logout-form']) !!}
+                                            {!! Form::close() !!}
+                                        </li>
+                                    </ul>
+                                </li>
+                            @else
+                                <li><a href="#"><i class="fa fa-user"></i> {{ trans('front.account.login') }}</a></li>
+                            @endif
                         </li>
                     </ul>
                 </div>

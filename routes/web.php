@@ -38,3 +38,4 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
 });
 
 Route::resource('product', 'Front\ProductController', ['as' => 'front', 'only' => ['index', 'show']]);
+Route::resource('rating', 'Front\RatingController', ['as' => 'front', 'only' => ['store', 'update']]);

@@ -27,4 +27,8 @@ return [
     'sugget_waiting' => 0,
     'sugget_accept' => 1,
     'sugget_reject' => 2,
+    'front' => [
+        'home-limit-take' => 3,
+        'home-trending-limit' => 6,
+    ],
 ];

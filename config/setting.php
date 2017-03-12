@@ -30,5 +30,6 @@ return [
     'front' => [
         'home-limit-take' => 3,
         'home-trending-limit' => 6,
+        'product-page-limit' => 12,
     ],
 ];

@@ -38,4 +38,19 @@ class Product extends Model
         return $this->belongsTo(OrderItem::class, 'id', 'product_id');
     }
 
+    public function getProductWithFilter($categories, $price, $orderBy, $direction)
+    {
+        $query = $this->select('name', 'image', 'price', 'avg_rating')->orderBy($orderBy ?: 'created_at', $direction ?: 'desc');
+
+        if ($price) {
+            $query->whereBetween('price', $price);
+        }
+
+        if ($categories) {
+            $query->whereIn('category_id', $categories);
+        }
+
+        return $query->paginate(config('setting.front.product-page-limit'));
+    }
+
 }

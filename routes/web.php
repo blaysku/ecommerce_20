@@ -36,3 +36,5 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::post('suggest/accept/{id}', 'SuggestController@accept')->name('suggest.accept');
     Route::resource('suggest', 'SuggestController', ['only' => ['index', 'show']]);
 });
+
+Route::resource('product', 'Front\ProductController', ['as' => 'front', 'only' => ['index', 'show']]);

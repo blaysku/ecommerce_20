@@ -28,6 +28,7 @@ return [
         'submit' => 'Submit',
         'login-to-rate' => 'Login to rate this product',
         'related' => 'Related products',
+        'recent' => 'Recently Products',
     ],
     'filter' => [
         'filter' => 'Filter',

@@ -24,6 +24,21 @@
                             </div>
                         @endforeach
                     </div>
+                    @if ($recentlyProducts)
+                        <div class="single-sidebar">
+                            <h2 class="sidebar-title">{{ trans('front.label.recent') }}</h2>
+                            @foreach ($recentlyProducts as $recentlyProduct)
+                                <div class="thubmnail-recent">
+                                    <img src="{{ Storage::url($recentlyProduct->image) }}" class="recent-thumb" alt="{{ $recentlyProduct->name }}">
+                                    <h2><a href="#">{{ $recentlyProduct->name }}</a></h2>
+                                    <div class="rateit" data-rateit-value="{{ $recentlyProduct->avg_rating }}" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+                                    <div class="product-sidebar-price">
+                                        <ins>{{ Format::currency($recentlyProduct->price) }}</ins>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
                 <div class="col-md-8">
                     <div class="product-content-right">
@@ -103,6 +118,9 @@
                                     </div>
                                 </div>
                             </div>
+                            <div id="fb-root"></div>
+                            <div class="fb-like" data-layout="standard" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
+                            <div class="fb-comments" data-numposts="5"></div>
                             <div class="related-products-wrapper">
                                 <h2 class="related-products-title">{{ trans('front.label.related') }}</h2>
                                 <div class="related-products-carousel">
@@ -111,7 +129,7 @@
                                         <div class="product-f-image">
                                             <img src="{{ Storage::url($relatedProduct->image) }}" alt="{{ $relatedProduct->name }}">
                                             <div class="product-hover">
-                                                <a href="#" class="add-to-cart-link"><i class="fa fa-shopping-cart"></i> {{ trans('front.label.add-to-cảt') }}</a>
+                                                <a href="#" class="add-to-cart-link"><i class="fa fa-shopping-cart"></i> {{ trans('front.label.add-to-cart') }}</a>
                                                 <a href="#" class="view-details-link"><i class="fa fa-link"></i> {{ trans('front.label.see-detail') }}</a>
                                             </div>
                                         </div>
@@ -144,4 +162,5 @@
         }
     </script>
     {{ HTML::script('front/js/product-show.js') }}
+    {{ HTML::script('front/js/facebook.js') }}
 @endsection

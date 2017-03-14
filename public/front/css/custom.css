@@ -12,3 +12,9 @@
     text-transform: uppercase;
     margin-top: 5px;
 }
+.fb-comments, .fb-comments span, .fb-comments iframe[style] {
+    width: 100% !important;
+}
+.fb-like {
+    margin: 5px 0;
+}

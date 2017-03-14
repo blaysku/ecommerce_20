@@ -59,15 +59,34 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
         try {
             $product = $this->product->findOrFail($id);
             $relatedProducts = $this->product->where('category_id', $product->category_id)->take(config('setting.front.limit'))->get();
             $trendingProducts = $this->product->whereIsTrending(config('setting.trending_product'))->take(config('setting.front.limit'))->get();
-            $userRating = $product->ratings->where('user_id', auth()->id())->first();
 
-            return view('front.products.show', compact('product', 'relatedProducts', 'trendingProducts', 'userRating'));
+            if (auth()->user()) {
+                $userRating = $product->ratings->where('user_id', auth()->id())->first();
+                $recentlyProducts = $request->session()->get('recent_viewed');
+
+                if (!is_array($recentlyProducts)) {
+                    $recentlyProducts = [];
+                }
+
+                if (!in_array($product->id, $recentlyProducts)) {
+                    $recentlyProducts[] = $product->id;
+                }
+
+                while (count($recentlyProducts) > config('setting.front.limit')) {
+                    array_shift($recentlyProducts);
+                }
+
+                $request->session()->put('recent_viewed', $recentlyProducts);
+                $recentlyProducts = $this->product->whereIn('id', $request->session()->get('recent_viewed'))->get() ;
+            }
+
+            return view('front.products.show', compact('product', 'relatedProducts', 'trendingProducts', 'userRating', 'recentlyProducts'));
         } catch (\Exception $e) {
             return view('front.404');
         }

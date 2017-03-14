@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>@yield('title') - {{ trans('front.label.title') }}</title>
         @section('css')
             {!! HTML::style('http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600') !!}

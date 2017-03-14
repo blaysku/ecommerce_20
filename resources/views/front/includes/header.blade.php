@@ -24,17 +24,17 @@
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-user"></span> {{ auth()->user()->name }}<b class="caret"></b></a>
                                     <ul class="dropdown-menu">
                                         <li>
-                                            <a href="{{ route('logout') }}" id="logout">
+                                            <a href="{{ route('logout') }}" id="logout" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                                                 <span class="fa fa-fw fa-power-off"></span>
                                                 {{ trans('admin.main.logout') }}
                                             </a>
-                                            {!! Form::open(['route' => 'logout', 'id' => 'logout-form']) !!}
+                                            {!! Form::open(['route' => 'logout', 'id' => 'logout-form', 'method' => 'POST']) !!}
                                             {!! Form::close() !!}
                                         </li>
                                     </ul>
                                 </li>
                             @else
-                                <li><a href="#"><i class="fa fa-user"></i> {{ trans('front.account.login') }}</a></li>
+                                <li><a href="{{ route('login') }}"><i class="fa fa-user"></i> {{ trans('front.account.login') }}</a></li>
                             @endif
                         </li>
                     </ul>
@@ -53,7 +53,7 @@
             </div>
             <div class="col-sm-6">
                 <div class="shopping-item">
-                    <a href="#">{{ trans('front.cart.cart') }} - <span class="cart-amunt">{{ trans('front.faker.cost') }}</span> <i class="fa fa-shopping-cart"></i> <span class="product-count">{{ trans('front.faker.count') }}</span></a>
+                    <a href="#">{{ trans('front.cart.cart') }} - <span class="cart-amunt">{{ Format::currency(request()->session()->has('cart') ? request()->session()->get('cart')->totalPrice : 0) }}</span> <i class="fa fa-shopping-cart"></i> <span class="product-count">{{ request()->session()->has('cart') ? count(request()->session()->get('cart')->items) : 0 }}</span></a>
                 </div>
             </div>
         </div>

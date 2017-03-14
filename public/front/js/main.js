@@ -85,3 +85,23 @@ jQuery(document).ready(function($){
     })
 });
 
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
+$('.add_to_cart_button, .add-to-cart-link').on('click', function(e) {
+    e.preventDefault();
+    $.ajax({
+        url:  data['addToCartRoute'] + '/' + $(this).attr('product-id'),
+        type: 'POST',
+        data: {
+            quantity: $(this).parent().find('.input-number').val() ? $(this).parent().find('.input-number').val() : 1,
+        },
+    })
+    .done(function(data) {
+        $('span.cart-amunt').text(data['totalPrice']);
+        $('span.product-count').text(data['totalItems']);
+    })
+});

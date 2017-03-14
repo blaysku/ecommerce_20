@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Front\RatingRequest;
 use App\Models\Rating;
 use App\Models\Product;
+use DB;
 
 class RatingController extends Controller
 {

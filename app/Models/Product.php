@@ -40,7 +40,7 @@ class Product extends Model
 
     public function getProductWithFilter($categories, $price, $orderBy, $direction)
     {
-        $query = $this->select('name', 'image', 'price', 'avg_rating')->orderBy($orderBy ?: 'created_at', $direction ?: 'desc');
+        $query = $this->select('id', 'name', 'image', 'price', 'avg_rating')->orderBy($orderBy ?: 'created_at', $direction ?: 'desc');
 
         if ($price) {
             $query->whereBetween('price', $price);

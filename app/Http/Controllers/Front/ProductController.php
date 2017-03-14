@@ -61,6 +61,15 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            $product = $this->product->findOrFail($id);
+            $relatedProducts = $this->product->where('category_id', $product->category_id)->take(config('setting.front.limit'))->get();
+            $trendingProducts = $this->product->whereIsTrending(config('setting.trending_product'))->take(config('setting.front.limit'))->get();
+            $userRating = $product->ratings->where('user_id', auth()->id())->first();
+
+            return view('front.products.show', compact('product', 'relatedProducts', 'trendingProducts', 'userRating'));
+        } catch (\Exception $e) {
+            return view('front.404');
+        }
     }
 }

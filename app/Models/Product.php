@@ -53,4 +53,9 @@ class Product extends Model
         return $query->paginate(config('setting.front.product-page-limit'));
     }
 
+    public function updateAvgRating()
+    {
+        $this->avg_rating = $this->ratings->avg('rating');
+        $this->save();
+    }
 }

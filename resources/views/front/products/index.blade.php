@@ -71,7 +71,8 @@
     <script>
         var data = {
             error: '{!! trans('admin.main.error') !!}',
-            value: [{{ request()->price ? request()->price[0] . ',' . request()->price[1] : '0, 10000' }}]
+            value: [{{ request()->price ? request()->price[0] . ',' . request()->price[1] : '0, 10000' }}],
+            addToCartRoute: "{{ route('front.product.addToCart', '') }}",
         };
     </script>
 @endsection

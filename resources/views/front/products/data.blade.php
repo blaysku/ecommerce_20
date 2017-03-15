@@ -5,13 +5,13 @@
                 <div class="product-upper">
                     <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}">
                 </div>
-                <h2><a href="#">{{ $product->name }}</a></h2>
+                <h2><a href="{{ route('front.product.show', $product->id) }}">{{ $product->name }}</a></h2>
                 <div class="rateit" data-rateit-value="{{ $product->avg_rating }}" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
                 <div class="product-carousel-price">
                     <ins>{{ Format::currency($product->price) }}</ins>
                 </div>
                 <div class="product-option-shop">
-                    <a class="add_to_cart_button" href="#">{{ trans('front.label.add-to-cart') }}</a>
+                    <a class="add_to_cart_button" href="#" product-id="{{ $product->id }}">{{ trans('front.label.add-to-cart') }}</a>
                 </div>
             </div>
         </div>

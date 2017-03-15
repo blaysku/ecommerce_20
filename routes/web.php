@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', 'Front\HomeController');
+Route::get('/', 'Front\HomeController')->name('index');
 
 Route::get('register/verify/{confirmationCode}', 'Auth\RegisterController@confirmEmail')->name('verify.email');
 
@@ -37,5 +37,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::resource('suggest', 'SuggestController', ['only' => ['index', 'show']]);
 });
 
+Route::post('product/add-to-cart/{id}', 'Front\ProductController@addToCart')->name('front.product.addToCart');
 Route::resource('product', 'Front\ProductController', ['as' => 'front', 'only' => ['index', 'show']]);
 Route::resource('rating', 'Front\RatingController', ['as' => 'front', 'only' => ['store', 'update']]);

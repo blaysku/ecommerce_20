@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Front;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Cart;
+use Format;
 
 class ProductController extends Controller
 {
@@ -89,6 +91,26 @@ class ProductController extends Controller
             return view('front.products.show', compact('product', 'relatedProducts', 'trendingProducts', 'userRating', 'recentlyProducts'));
         } catch (\Exception $e) {
             return view('front.404');
+        }
+    }
+
+    public function addToCart(Request $request, $id)
+    {
+        if ($request->ajax()) {
+            try {
+                $product = $this->product->findOrFail($id);
+                $oldCart = $request->session()->has('cart') ? $request->session()->get('cart') : null;
+                $cart = new Cart($oldCart);
+                $cart->add($product, $product->id, $request->get('quantity'));
+                $request->session()->put('cart', $cart);
+                $data = $request->session()->get('cart');
+                return response()->json([
+                    'totalPrice' => Format::currency($data->totalPrice),
+                    'totalItems' => count($data->items),
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([], 400);
+            }
         }
     }
 }

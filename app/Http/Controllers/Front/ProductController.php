@@ -67,6 +67,7 @@ class ProductController extends Controller
             $product = $this->product->findOrFail($id);
             $relatedProducts = $this->product->where('category_id', $product->category_id)->take(config('setting.front.limit'))->get();
             $trendingProducts = $this->product->whereIsTrending(config('setting.trending_product'))->take(config('setting.front.limit'))->get();
+            $storedCart = $request->session()->has('cart') ? $request->session()->get('cart') : null;
 
             if (auth()->user()) {
                 $userRating = $product->ratings->where('user_id', auth()->id())->first();
@@ -88,7 +89,7 @@ class ProductController extends Controller
                 $recentlyProducts = $this->product->whereIn('id', $request->session()->get('recent_viewed'))->get() ;
             }
 
-            return view('front.products.show', compact('product', 'relatedProducts', 'trendingProducts', 'userRating', 'recentlyProducts'));
+            return view('front.products.show', compact('product', 'relatedProducts', 'trendingProducts', 'userRating', 'recentlyProducts', 'storedCart'));
         } catch (\Exception $e) {
             return view('front.404');
         }
@@ -101,15 +102,22 @@ class ProductController extends Controller
                 $product = $this->product->findOrFail($id);
                 $oldCart = $request->session()->has('cart') ? $request->session()->get('cart') : null;
                 $cart = new Cart($oldCart);
+
+                if ($product->quantity == 0 || (count($oldCart) && array_key_exists($id, $oldCart->items) && $oldCart->items[$id]['restAmount'] == 0)) {
+                    return response()->json(['error' => trans('front.cart.out-of-stock')], 400);
+                }
+
                 $cart->add($product, $product->id, $request->get('quantity'));
                 $request->session()->put('cart', $cart);
                 $data = $request->session()->get('cart');
+
                 return response()->json([
                     'totalPrice' => Format::currency($data->totalPrice),
                     'totalItems' => count($data->items),
+                    'restAmount' => $data->items[$id]['restAmount'],
                 ]);
             } catch (\Exception $e) {
-                return response()->json([], 400);
+                return response()->json(['error' => trans('admin.main.error')], 400);
             }
         }
     }

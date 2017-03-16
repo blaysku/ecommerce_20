@@ -62,6 +62,16 @@ return [
     'cart' => [
         'cart' => 'Cart',
         'my-cart' => 'My cart',
+        'out-of-stock' => 'Out of stock',
+        'product' => 'Product',
+        'quantity' => 'Quantity',
+        'total' => 'Total',
+        'cart-total' => 'Cart totals',
+        'sub-total' => 'Cart Subtotal',
+        'shipping' => 'Shipping and Handling',
+        'order-total' => 'Order Total',
+        'update' => 'Update Cart',
+        'checkout' => 'Proceed to Checkout',
     ],
     'newsletter' => [
         'title' => 'Newsletter',

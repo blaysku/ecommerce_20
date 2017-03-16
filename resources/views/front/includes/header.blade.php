@@ -6,7 +6,6 @@
                     <ul>
                         <li><a href="#"><i class="fa fa-user"></i> {{ trans('front.account.my-account') }}</a></li>
                         <li><a href="#"><i class="fa fa-heart"></i> {{ trans('front.account.wishlist') }}</a></li>
-                        <li><a href="#"><i class="fa fa-user"></i> {{ trans('front.cart.my-cart') }}</a></li>
                     </ul>
                 </div>
             </div>
@@ -47,7 +46,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="logo">
-                    <h1><a href="#">{!! trans('front.label.branch') !!}</a></h1>
+                    <h1><a href="{{ route('index') }}">{!! trans('front.label.branch') !!}</a></h1>
                 </div>
             </div>
             <div class="col-sm-6">
@@ -75,12 +74,15 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">{{ trans('front.label.home') }}</a></li>
-                    <li><a href="#">{{ trans('front.label.shop-page') }}</a></li>
-                    @foreach ($categories as $category)
-                        <li><a href="#">{{ $category->name }}</a></li>
-                    @endforeach
-                    <li><a href="#">{{ trans('front.cart.my-cart') }}</a></li>
+                    <li class="active"><a href="{{ route('index') }}">{{ trans('front.label.home') }}</a></li>
+                    <li><a href="{{ route('front.product.index') }}">{{ trans('front.label.shop-page') }}</a></li>
+                    <li class="nav-cart">
+                        <a href="{{ route('front.cart.index') }}">{{ trans('front.cart.cart') }} :
+                        <span>{{ Format::currency(request()->session()->has('cart') ? request()->session()->get('cart')->totalPrice : 0) }}</span>
+                            <i class="fa fa-shopping-cart"></i>
+                            <span class="product-count">{{ request()->session()->has('cart') ? count(request()->session()->get('cart')->items) : 0 }}</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

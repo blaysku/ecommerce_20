@@ -13,6 +13,7 @@
             {!! HTML::style('/bower_components/bootstrap-legacy/dist/css/bootstrap.min.css') !!}
             {!! HTML::style('/bower_components/font-awesome/css/font-awesome.css') !!}
             {!! HTML::style('/bower_components/jquery.rateit/scripts/rateit.css') !!}
+            {!! HTML::style('/bower_components/sweetalert/dist/sweetalert.css') !!}
             {{ HTML::style('front/css/owl.carousel.css') }}
             {{ HTML::style('front/css/responsive.css') }}
             {{ HTML::style('front/css/style.css') }}
@@ -35,6 +36,7 @@
             {!! HTML::script('/bower_components/jquery.rateit/scripts/jquery.rateit.min.js') !!}
             {!! HTML::script('/bower_components/jquery.easing/js/jquery.easing.min.js') !!}
             {!! HTML::script('/bower_components/jquery-sticky/jquery.sticky.js') !!}
+            {!! HTML::script('/bower_components/sweetalert/dist/sweetalert.min.js') !!}
             {{ HTML::script('front/js/owl.carousel.min.js') }}
             {{ HTML::script('front/js/main.js') }}
         @show

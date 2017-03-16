@@ -37,6 +37,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::resource('suggest', 'SuggestController', ['only' => ['index', 'show']]);
 });
 
-Route::post('product/add-to-cart/{id}', 'Front\ProductController@addToCart')->name('front.product.addToCart');
-Route::resource('product', 'Front\ProductController', ['as' => 'front', 'only' => ['index', 'show']]);
-Route::resource('rating', 'Front\RatingController', ['as' => 'front', 'only' => ['store', 'update']]);
+Route::group(['as' => 'front.'], function () {
+    Route::post('product/add-to-cart/{id}', 'Front\ProductController@addToCart')->name('product.addToCart');
+    Route::resource('product', 'Front\ProductController', ['only' => ['index', 'show']]);
+    Route::resource('rating', 'Front\RatingController', ['only' => ['store', 'update']]);
+    Route::post('cart/update', 'Front\CartController@update')->name('cart.update');
+    Route::resource('cart', 'Front\CartController', ['only' => ['index', 'destroy'], 'before' => 'auth']);
+});

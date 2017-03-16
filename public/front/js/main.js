@@ -103,5 +103,10 @@ $('.add_to_cart_button, .add-to-cart-link').on('click', function(e) {
     .done(function(data) {
         $('span.cart-amunt').text(data['totalPrice']);
         $('span.product-count').text(data['totalItems']);
+        $("input[name='quantity']").attr('max', data['restAmount']);
+    })
+    .fail(function(data) {
+        var error = data.responseJSON;
+        alert(error['error']);
     })
 });

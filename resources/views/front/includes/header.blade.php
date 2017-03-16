@@ -36,7 +36,6 @@
                             @else
                                 <li><a href="{{ route('login') }}"><i class="fa fa-user"></i> {{ trans('front.account.login') }}</a></li>
                             @endif
-                        </li>
                     </ul>
                 </div>
             </div>
@@ -53,7 +52,11 @@
             </div>
             <div class="col-sm-6">
                 <div class="shopping-item">
-                    <a href="#">{{ trans('front.cart.cart') }} - <span class="cart-amunt">{{ Format::currency(request()->session()->has('cart') ? request()->session()->get('cart')->totalPrice : 0) }}</span> <i class="fa fa-shopping-cart"></i> <span class="product-count">{{ request()->session()->has('cart') ? count(request()->session()->get('cart')->items) : 0 }}</span></a>
+                    <a href="{{ route('front.cart.index') }}">{{ trans('front.cart.cart') }} :
+                    <span class="cart-amunt">{{ Format::currency(request()->session()->has('cart') ? request()->session()->get('cart')->totalPrice : 0) }}</span>
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="product-count">{{ request()->session()->has('cart') ? count(request()->session()->get('cart')->items) : 0 }}</span>
+                    </a>
                 </div>
             </div>
         </div>

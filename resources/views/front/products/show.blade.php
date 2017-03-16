@@ -62,7 +62,12 @@
                                     <form action="#" class="cart">
                                         <div class="quantity">
                                             {!! Form::button('<span class="glyphicon glyphicon-minus"></span>', ['class'=>'btn btn-default btn-number', 'data-type' => 'minus', 'data-field' => 'quantity']) !!}
-                                            {!! Form::text('quantity', 1, ['size' => 4, 'class' => 'input-number input-text', 'min' => 1, 'max' => $product->quantity]) !!}
+                                            {!! Form::text('quantity', 1, [
+                                                'size' => 4,
+                                                'class' => 'input-number input-text',
+                                                'min' => 0,
+                                                'max' => isset($storedCart) && array_key_exists($product->id, $storedCart->items) ? $storedCart->items[$product->id]['restAmount'] : $product->quantity
+                                            ]) !!}
                                             {!! Form::button('<span class="glyphicon glyphicon-plus"></span>', ['class'=>'btn btn-default btn-number', 'data-type' => 'plus', 'data-field' => 'quantity']) !!}
                                         </div>
                                         {!! Form::button(trans('front.label.add-to-cart'), ['product-id' => $product->id, 'type' => 'submit', 'class' => 'add_to_cart_button']) !!}
@@ -159,8 +164,10 @@
             'userId': '{{ auth()->id() ?: null }}',
             'faceBookAppId': "{{ config('setting.facebook_app_id') }}",
             'addToCartRoute': "{{ route('front.product.addToCart', '') }}",
+            'restAmount': '{{ isset($restAmount) ? $restAmount : null }}',
         }
     </script>
+    {{ HTML::script('front/js/bootstrap-minus-plus.js') }}
     {{ HTML::script('front/js/product-show.js') }}
     {{ HTML::script('front/js/facebook.js') }}
 @endsection

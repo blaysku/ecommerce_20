@@ -21,3 +21,7 @@
 .slider.slider-horizontal {
     width: 100% !important;
 }
+input:disabled {
+    cursor: not-allowed !important;
+    background-color: #222;
+}

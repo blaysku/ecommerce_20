@@ -29,6 +29,17 @@ return [
         'login-to-rate' => 'Login to rate this product',
         'related' => 'Related products',
         'recent' => 'Recently Products',
+        'close' => 'Close',
+        'id' => 'Id',
+    ],
+    'error' => [
+        '401' => 'You are not authorized to view this content!',
+    ],
+    'user' => [
+        'updated' => 'Update your profile successfully!',
+        'profile' => 'Profile',
+        'update-profile' => 'Update your profile',
+        'order-history' => 'See your order history',
     ],
     'filter' => [
         'filter' => 'Filter',
@@ -82,6 +93,7 @@ return [
         'your-order' => 'Your order',
         'bank-transfer' => 'Direct Bank Transfer',
         'place-order' => 'Place Order',
+        'cancel' => 'Cancel this order?',
         'paypal' => 'Paypal',
         'remainder' => 'Remainder',
         'bank-msg' => 'Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.',

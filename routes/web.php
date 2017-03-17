@@ -45,4 +45,7 @@ Route::group(['as' => 'front.'], function () {
     Route::resource('cart', 'Front\CartController', ['only' => ['index', 'destroy'], 'before' => 'auth']);
     Route::get('checkout', 'Front\CartController@showCheckout')->name('cart.checkout');
     Route::post('checkout', 'Front\CartController@checkout');
+    Route::post('user', 'Front\UserController@update')->name('user.update');
+    Route::resource('user', 'Front\UserController', ['only' => 'show']);
+    Route::resource('order', 'Front\OrderController', ['only' => ['show', 'update']]);
 });

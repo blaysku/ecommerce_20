@@ -7,7 +7,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    @if (!$cart)
+                    @if (!$cart || !$cart->items)
                         <h2 class="text-center">{{ trans('front.cart.empty') }}</h2>
                     @else
                         <div class="product-content-right">

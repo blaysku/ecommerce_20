@@ -59,10 +59,14 @@
                                     <div class="product-inner-price">
                                         <ins>{{ Format::currency($product->price) }}</ins>
                                     </div>
+                                    <div class="remainder">
+                                        <span>{{ trans('front.cart.remainder') }} </span>
+                                        <ins>{{ isset($storedCart) && array_key_exists($product->id, $storedCart->items) ? $storedCart->items[$product->id]['restAmount'] : $product->quantity }}</ins>
+                                    </div>
                                     <form action="#" class="cart">
                                         <div class="quantity">
                                             {!! Form::button('<span class="glyphicon glyphicon-minus"></span>', ['class'=>'btn btn-default btn-number', 'data-type' => 'minus', 'data-field' => 'quantity']) !!}
-                                            {!! Form::text('quantity', 1, [
+                                            {!! Form::text('quantity', 0, [
                                                 'size' => 4,
                                                 'class' => 'input-number input-text',
                                                 'min' => 0,

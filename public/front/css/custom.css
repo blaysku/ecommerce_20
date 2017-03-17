@@ -25,3 +25,13 @@ input:disabled {
     cursor: not-allowed !important;
     background-color: #222;
 }
+.nav-cart .product-count {
+    background: #333;
+    position: static;
+}
+.actions a:hover, .actions a:focus {
+    text-decoration: none;
+}
+.remainder {
+    margin-bottom: 10px;
+}

@@ -8,7 +8,7 @@ CKEDITOR.replace( 'review', config);
 
 var review = data['review'];
 var _url = data['routeStore'];
-var type = 'POST';
+var _type = 'POST';
 
 if (review) {
     $("#edit").hide();
@@ -19,13 +19,13 @@ $("#edit-review").on('click', function(e) {
     $("#edit").show();
     $("#review-content").hide();
     _url = data['routeUpdate'];
-    type = 'PUT';
+    _type = 'PUT';
 });
 
 $('#review-submit').on('click', function() {
     $.ajax({
         url: _url,
-        type: type,
+        type: _type,
         data: {
             rating: $("#rating").rateit('value'),
             review: CKEDITOR.instances.review.getData(),

@@ -6,7 +6,12 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Product;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Http\Requests\Front\CheckoutRequest;
 use Format;
+use Auth;
+use DB;
 
 class CartController extends Controller
 {
@@ -61,7 +66,7 @@ class CartController extends Controller
     public function destroy($id, Request $request)
     {
         if ($request->ajax()) {
-            $oldCart = $request->session()->has('cart') ? $request->session()->get('cart') : null;
+            $oldCart = $request->session()->get('cart', null);
             $cart = new Cart($oldCart);
 
             if ($cart->removeItem($id)) {
@@ -74,6 +79,47 @@ class CartController extends Controller
                 ]);
             }
 
+            return response()->json([], 400);
+        }
+    }
+
+    public function showCheckout(Request $request)
+    {
+        $trendingProducts = Product::whereIsTrending(config('setting.trending_product'))->take(config('setting.front.limit'))->get();
+        $cart = $request->session()->get('cart', null);
+        return view('front.carts.checkout', compact('cart', 'trendingProducts'));
+    }
+
+    public function checkout(CheckoutRequest $request)
+    {
+        DB::beginTransaction();
+        try {
+            $cart = $request->session()->get('cart');
+            $orderDetail = array_merge($request->only(['name', 'phone', 'address']), [
+                'user_id' => Auth::user()->id,
+                'total_price' => $cart->totalPrice,
+                'status' => config('setting.waiting_order'),
+            ]);
+            $orderItems = [];
+
+            foreach ($cart->items as $productId => $product) {
+                $orderproducts[] = [
+                    'product_id' => $productId,
+                    'quantity' => $product['quantity'],
+                    'price' => $product['price'],
+                ];
+
+                Product::find($productId)->update(['quantity' => $product['restAmount']]);
+            }
+
+            $order = Order::create($orderDetail);
+            $order->orderItems()->createMany($orderItems);
+            $request->session()->forget('cart');
+            DB::commit();
+
+            return response()->json();
+        } catch (\Exception $e) {
+            DB::rollback();
             return response()->json([], 400);
         }
     }

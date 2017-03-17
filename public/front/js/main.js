@@ -101,9 +101,10 @@ $('.add_to_cart_button, .add-to-cart-link').on('click', function(e) {
         },
     })
     .done(function(data) {
-        $('span.cart-amunt').text(data['totalPrice']);
+        $('span.cart-amunt, .nav-cart span').text(data['totalPrice']);
         $('span.product-count').text(data['totalItems']);
-        $("input[name='quantity']").attr('max', data['restAmount']);
+        $('input[name="quantity"]').attr('max', data['restAmount']);
+        $('.remainder ins').text(data['restAmount']);
     })
     .fail(function(data) {
         var error = data.responseJSON;

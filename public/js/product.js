@@ -35,3 +35,15 @@ $(function() {
         });
     });
 });
+$('.page-header #import').on('click', function(e) {
+    e.preventDefault();
+    swal({
+        title: data['importMsg'],
+        showCancelButton: true,
+        confirmButtonText: data['yes'],
+        cancelButtonText: data['no']
+    }, function(isConfirm){
+        if (isConfirm)
+            window.location.href = $('.page-header a').attr('href');
+    });
+})

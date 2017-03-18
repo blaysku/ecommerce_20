@@ -4,6 +4,8 @@ return [
     'avatars_folder' => 'public/avatars',
     'image_folder' => 'public/images',
     'suggest_image_folder' => 'public/suggets',
+    'import_files_folder' => 'public/imports',
+    'import_files_path' => 'storage/imports/',
     'default_avatar' => 'public/avatars/default.jpg',
     'default_image' => 'public/images/default.jpg',
     'default_suggest_image' => 'public/suggests/default.jpg',

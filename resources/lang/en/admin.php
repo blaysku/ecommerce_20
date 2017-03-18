@@ -30,6 +30,8 @@ return [
         'none' => 'None',
         'reset' => 'Reset',
         'error' => 'Errors occurred',
+        'created_at' => 'Created at',
+        'updated_at' => 'Updated at',
     ],
     'user' => [
         'dashboard' => 'Users manager',
@@ -103,6 +105,11 @@ return [
         'trending' => 'Trending',
         'description' => 'Description',
         'rating' => 'Rating',
+        'preview' => 'Preview',
+        'preview-import' => 'Preview and import product',
+        'import-confirm' => 'Import all to database?',
+        'import' => 'Import to database',
+        'imported' => 'Data imported.',
     ],
     'order' => [
         'dashboard' => 'Order manager',

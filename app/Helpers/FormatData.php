@@ -11,7 +11,7 @@ class FormatData
         return number_format($price * config('setting.currency_unit')) . ' ' . config('setting.currency');
     }
 
-    public static function upload($request, $imageFieldName, $uploadFolder)
+    public static function upload($request, $imageFieldName, $uploadFolder, $path = true)
     {
         if (!$request->hasFile($imageFieldName)) {
             return null;
@@ -25,6 +25,10 @@ class FormatData
         }
 
         $image = $file->storeAs($uploadFolder, $fileName);
+
+        if ($path == false) {
+            return $fileName;
+        }
 
         return $image;
     }

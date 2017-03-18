@@ -6,6 +6,23 @@
         'fil' => trans('admin.product.product'),
     ])
     @include('admin.partials.message')
+    <div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default pull-right">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ trans('admin.product.preview-import') }}</h3>
+            </div>
+            <div class="panel-body">
+                {!! Form::open(['files' => true,'action' => 'ProductController@uploadDataFile']) !!}
+                    <div class="form-group">
+                        {!! Form::file('data', []) !!}
+                    </div>
+                    {!! Form::submit(trans('admin.product.preview'), ['class' => 'btn btn-primary']) !!}
+                {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+    </div>
     <div class="table-responsive">
         <table class="table">
             <thead>

@@ -9,8 +9,11 @@ use DB;
 use App\Models\Category;
 use App\Http\Requests\ProductCreateRequest;
 use App\Http\Requests\ProductUpdateRequest;
+use App\Http\Requests\ImportRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Suggest;
+use App\Helpers\FormatData;
+use Excel;
 
 class ProductController extends Controller
 {
@@ -19,24 +22,6 @@ class ProductController extends Controller
     public function __construct(Product $product)
     {
         $this->product = $product;
-    }
-
-    protected function uploadImage($request)
-    {
-        if (!($request->hasFile('image'))) {
-            return null;
-        }
-
-        $file = $request->file('image');
-        $fileName = $file->getClientOriginalName();
-
-        if (Storage::exists(config('setting.image_folder') . '/' .$fileName)) {
-            $fileName = md5(time()) . $fileName;
-        }
-
-        $avatar = $file->storeAs(config('setting.image_folder'), $fileName);
-
-        return $avatar;
     }
 
     /**
@@ -72,7 +57,7 @@ class ProductController extends Controller
     public function store(ProductCreateRequest $request)
     {
         try {
-            $image = $this->uploadImage($request);
+            $image = FormatData::upload($request, 'image', config('setting.image_folder'));
             $input = $request->all();
 
             if (isset($image)) {
@@ -92,7 +77,7 @@ class ProductController extends Controller
             }
 
             return redirect()->route('product.index')->with('message', trans('admin.category.created'));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return redirect()->back()->with(['message' => trans('admin.main.error'), 'level' => 'danger']);
         }
     }
@@ -126,7 +111,7 @@ class ProductController extends Controller
     {
         try {
             $product = $this->product->findOrFail($id);
-            $image = $this->uploadImage($request);
+            $image = FormatData::upload($request, 'image', config('setting.image_folder'));
             $input = $request->all();
             $input['image'] = $image;
 
@@ -140,7 +125,7 @@ class ProductController extends Controller
             $product->update($input);
 
             return redirect()->route('product.index', $product->id)->with('message', trans('admin.product.updated'));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return redirect()->route('product.index')->with(['message' => trans('admin.main.error'), 'level' => 'danger']);
         }
     }
@@ -161,7 +146,7 @@ class ProductController extends Controller
             DB::commit();
 
             return redirect()->back()->with('message', trans('admin.product.destroyed'));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollback();
 
             return redirect()->back()->with(['message' => trans('admin.main.error'), 'level' => 'danger']);
@@ -177,9 +162,48 @@ class ProductController extends Controller
                 $product->is_trending = $isTrending;
                 $product->save();
                 return response()->json();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return response()->json([], 400);
             }
+        }
+    }
+
+    public function uploadDataFile(ImportRequest $request)
+    {
+        $dataFile = FormatData::upload($request, 'data', config('setting.import_files_folder'), false);
+
+        if (!$dataFile) {
+            return redirect()->back()->with(['message' => trans('admin.main.error'), 'level' => 'danger']);
+        }
+
+        return redirect()->action('ProductController@previewImport', $dataFile);
+    }
+
+    public function previewImport($fileName)
+    {
+        try {
+            $products = Excel::load(config('setting.import_files_path') . $fileName)->get();
+
+            return view('admin.products.preview', compact('products', 'fileName'));
+        } catch (\Exception $e) {
+            return redirect()->route('admin.product.index')->with(['message' => trans('admin.main.error'), 'level' => 'danger']);
+        }
+    }
+
+    public function importProduct($fileName)
+    {
+        DB::beginTransaction();
+        try {
+            $products = Excel::load(config('setting.import_files_path') . $fileName)->get()->toArray();
+
+            $this->product->insert($products);
+            DB::commit();
+
+            return redirect()->route('product.index')->with('message', trans('admin.product.imported'));
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            return redirect()->back()->with(['message' => trans('admin.main.error'), 'level' => 'danger']);
         }
     }
 }

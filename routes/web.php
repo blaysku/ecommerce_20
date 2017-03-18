@@ -27,6 +27,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::resource('category', 'CategoryController', ['except' => ['show', 'create']]);
 
     Route::put('product/trending/{id}', 'ProductController@changTrendingAjax')->name('product.trending');
+    Route::post('upload-file-import', 'ProductController@uploadDataFile');
+    Route::get('preview/{fileName}', 'ProductController@previewImport');
+    Route::get('import/{fileName}', 'ProductController@importProduct');
     Route::resource('product', 'ProductController', ['except' => 'show']);
 
     Route::put('order/change-status/{id}', 'OrderController@changeStatusWithAjax')->name('order.status');

@@ -178,6 +178,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
     ],
 
@@ -230,6 +231,7 @@ return [
         'HTML' => Collective\Html\HtmlFacade::class,
         'CheckPath' => App\Helpers\CheckPath::class,
         'Format' => App\Helpers\FormatData::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 
     ],
 

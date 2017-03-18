@@ -74,10 +74,13 @@
                                     @endif
                                     @if (Auth::check() && Auth::user()->id == $user->id)
                                         <a class="btn btn-primary" data-toggle="modal" href='#modal-id'>
-                                            <i class="fa fa-pencil"></i> {{ trans('front.user.update-profile') }}
+                                            <i class="fa fa-fw fa-pencil"></i> {{ trans('front.user.update-profile') }}
                                         </a>
                                         <a class="btn btn-primary see-order" href='#'>
-                                            <i class="fa fa-eye"></i> {{ trans('front.user.order-history') }}
+                                            <i class="fa fa-fw fa-eye"></i> {{ trans('front.user.order-history') }}
+                                        </a>
+                                        <a class="btn btn-primary" href="{{ route('front.user.suggest', $user->id) }}">
+                                            <i class="fa fa-fw fa-lightbulb-o"></i>{{ trans('front.account.wishlist') }}
                                         </a>
                                         <div class="modal fade" id="modal-id">
                                             <div class="modal-dialog">

@@ -7,6 +7,7 @@ return [
         'home-page' => 'Home page',
         'shop-page' => 'Shop page',
         'branch' => 'e<span>Electronics</span>',
+        'checkout' => 'Checkout',
         'view-all' => 'View All',
         'copyright' => '&copy; 2015 eElectronics. All Rights Reserved.',
         'categories' => 'Categories',
@@ -40,6 +41,7 @@ return [
         'profile' => 'Profile',
         'update-profile' => 'Update your profile',
         'order-history' => 'See your order history',
+        'profile' => 'View profile',
     ],
     'filter' => [
         'filter' => 'Filter',
@@ -78,6 +80,7 @@ return [
     'cart' => [
         'cart' => 'Cart',
         'my-cart' => 'My cart',
+        'shopping-cart' => 'Shopping Cart',
         'out-of-stock' => 'Out of stock',
         'product' => 'Product',
         'quantity' => 'Quantity',
@@ -91,7 +94,7 @@ return [
         'empty' => 'Cart Empty!',
         'updated' => 'Update cart successfully!',
         'remove' => 'Remove this item?',
-        'placed' => 'Place order successfully!',
+        'placed' => 'Place order successfully! Check your email for more detail.',
         'login-to-order' => 'Login to place your order!',
         'bill-detail' => 'Billing details',
         'diff-address' => 'Ship to a different address?',
@@ -102,6 +105,10 @@ return [
         'paypal' => 'Paypal',
         'remainder' => 'Remainder',
         'bank-msg' => 'Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.',
+        'mail-sub-title' => 'Thanks for your ordering! This is your order details.',
+        'order-url' => 'Click here to see your order detail on our website.',
+        'wait' => 'Please wait, we will send you an email!',
+        'mail-subject' => 'Thank you for your order ',
     ],
     'newsletter' => [
         'title' => 'Newsletter',

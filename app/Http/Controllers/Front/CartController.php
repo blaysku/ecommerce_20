@@ -12,6 +12,7 @@ use App\Http\Requests\Front\CheckoutRequest;
 use Format;
 use Auth;
 use DB;
+use Mail;
 
 class CartController extends Controller
 {
@@ -122,6 +123,11 @@ class CartController extends Controller
             $order->orderItems()->createMany($orderItems);
             $request->session()->forget('cart');
             DB::commit();
+            Mail::queue('front.orders.order-email', ['order' => $order], function ($message) {
+                $message->to(Auth::user()->email, Auth::user()->name)
+                    ->subject(trans('front.cart.mail-subject'));
+            });
+
 
             return response()->json();
         } catch (\Exception $e) {

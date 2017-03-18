@@ -35,3 +35,6 @@ input:disabled {
 .remainder {
     margin-bottom: 10px;
 }
+.img-item {
+    max-width: 50px;
+}

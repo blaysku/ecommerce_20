@@ -4,8 +4,6 @@
             <div class="col-md-8">
                 <div class="user-menu">
                     <ul>
-                        <li><a href="#"><i class="fa fa-user"></i> {{ trans('front.account.my-account') }}</a></li>
-                        <li><a href="#"><i class="fa fa-heart"></i> {{ trans('front.account.wishlist') }}</a></li>
                     </ul>
                 </div>
             </div>
@@ -23,6 +21,7 @@
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-fw fa-user"></span> {{ auth()->user()->name }}<b class="caret"></b></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ route('front.user.show', auth()->id()) }}"><span class="fa fa-fw fa-user"></span> {{ trans('front.account.my-account') }}</a></li>
+                                        <li><a href="{{ route('front.user.suggest', auth()->id()) }}"><i class="fa fa-fw fa-heart"></i> {{ trans('front.account.wishlist') }}</a></li>
                                         <li>
                                             <a href="{{ route('logout') }}" id="logout" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                                                 <span class="fa fa-fw fa-power-off"></span>
@@ -75,15 +74,18 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="{{ route('index') }}">{{ trans('front.label.home') }}</a></li>
-                    <li><a href="{{ route('front.product.index') }}">{{ trans('front.label.shop-page') }}</a></li>
-                    <li class="nav-cart">
+                    <li {!! CheckPath::classActivePath('/') !!}><a href="{{ route('index') }}">{{ trans('front.label.home') }}</a></li>
+                    <li {!! CheckPath::classActiveSegment(1, 'product') !!}><a href="{{ route('front.product.index') }}">{{ trans('front.label.shop-page') }}</a></li>
+                    <li class="nav-cart {!! CheckPath::classActiveOnlyPath('cart') !!}">
                         <a href="{{ route('front.cart.index') }}">{{ trans('front.cart.cart') }} :
                         <span>{{ Format::currency(request()->session()->has('cart') ? request()->session()->get('cart')->totalPrice : 0) }}</span>
                             <i class="fa fa-shopping-cart"></i>
                             <span class="product-count">{{ request()->session()->has('cart') ? count(request()->session()->get('cart')->items) : 0 }}</span>
                         </a>
                     </li>
+                    @if (request()->session()->has('cart') && request()->session()->get('cart')->items)
+                        <li {!! CheckPath::classActivePath('checkout') !!}><a href="{{ route('front.cart.checkout') }}">{{ trans('front.label.checkout') }}</a></li>
+                    @endif
                 </ul>
             </div>
         </div>

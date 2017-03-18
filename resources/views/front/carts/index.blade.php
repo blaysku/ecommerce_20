@@ -1,7 +1,7 @@
 @extends('front.template')
-@section('title', trans('front.label.shop-page'))
+@section('title', trans('front.cart.shopping-cart'))
 @section('main')
-    @include('front.includes.title', ['title' => 'Shopping Cart'])
+    @include('front.includes.title', ['title' => trans('front.cart.shopping-cart')])
     <div class="single-product-area">
         <div class="zigzag-bottom"></div>
         <div class="container">

@@ -1,7 +1,7 @@
 @extends('front.template')
-@section('title', trans('front.label.shop-page'))
+@section('title', trans('front.label.checkout'))
 @section('main')
-    @include('front.includes.title', ['title' => 'Shopping Cart'])
+    @include('front.includes.title', ['title' => trans('front.label.checkout')])
     <div class="single-product-area">
         <div class="zigzag-bottom"></div>
         <div class="container">
@@ -141,9 +141,11 @@
                                                 </label>
                                             </li>
                                         </ul>
+                                        @if (Auth::check())
                                         <div class="form-row place-order">
                                             {!! Form::submit(trans('front.cart.place-order'), ['class' => 'button alt', 'id' => 'place_order']) !!}
                                         </div>
+                                        @endif
                                         <div class="clear"></div>
                                     </div>
                                 </div>
@@ -161,7 +163,7 @@
         var info = {
             checkoutUrl: '{{ action('Front\CartController@checkout') }}',
             redirectUrl: '{{ route('index')}}',
-            successMsg: '{{ trans('front.cart.placed') }}'
+            successMsg: '{{ trans('front.cart.placed') }}',
         }
     </script>
     {{ HTML::script('front/js/checkout.js') }}

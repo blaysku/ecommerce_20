@@ -1,5 +1,5 @@
 @extends('front.template')
-@section('title', trans('front.label.shop-page'))
+@section('title', $product->name)
 @section('main')
     @include('front.includes.title', ['title' => $product->name])
     <div class="single-product-area">

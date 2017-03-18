@@ -70,4 +70,15 @@ class UserController extends Controller
             }
         }
     }
+
+    public function showSuggestList($id)
+    {
+        try {
+            $user = $this->user->findOrFail($id);
+            $suggests = $user->suggests()->paginate(config('setting.pagination_limit'));
+            return view('front.users.suggest', compact('suggests', 'user'));
+        } catch (\Exception $e) {
+            return view('front.404');
+        }
+    }
 }

@@ -13,6 +13,8 @@
 
 Route::get('/', 'Front\HomeController')->name('index');
 
+Route::get('language/{lang}', 'LanguageController');
+
 Route::get('register/verify/{confirmationCode}', 'Auth\RegisterController@confirmEmail')->name('verify.email');
 
 Auth::routes();
@@ -25,6 +27,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
 
     Route::get('user/{role?}', 'UserController@index')->where('role', config('setting.admin'))->name('user.index');
     Route::put('user/changestatus/{id}', 'UserController@changeStatusWithAjax')->name('user.status');
+    Route::post('user/change-status-multi/', 'UserController@changeStatusMultiUser')->name('user.status.multi');
+    Route::post('user/destroy-multi/', 'UserController@destroyMultiUser')->name('user.destroy.multi');
     Route::resource('user', 'UserController', ['except' => 'index']);
 
     Route::resource('category', 'CategoryController', ['except' => ['show', 'create']]);
@@ -33,13 +37,16 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::post('upload-file-import', 'ProductController@uploadDataFile');
     Route::get('preview/{fileName}', 'ProductController@previewImport');
     Route::get('import/{fileName}', 'ProductController@importProduct');
+    Route::post('product/destroy-multi/', 'ProductController@destroyMulti')->name('product.destroy.multi');
     Route::resource('product', 'ProductController', ['except' => 'show']);
 
     Route::put('order/change-status/{id}', 'OrderController@changeStatusWithAjax')->name('order.status');
+    Route::post('order/update-multi/', 'OrderController@updateMulti')->name('order.update.multi');
     Route::resource('order', 'OrderController', ['only' => ['index', 'show']]);
 
     Route::post('suggest/reject/{id}', 'SuggestController@reject')->name('suggest.reject');
     Route::post('suggest/accept/{id}', 'SuggestController@accept')->name('suggest.accept');
+    Route::post('suggest/suggest-multi/', 'SuggestController@rejectMulti')->name('suggest.reject.multi');
     Route::resource('suggest', 'SuggestController', ['only' => ['index', 'show']]);
 });
 
@@ -57,3 +64,7 @@ Route::group(['as' => 'front.'], function () {
     Route::resource('order', 'Front\OrderController', ['only' => ['show', 'update']]);
     Route::post('suggest', 'Front\SuggestController')->name('suggest');
 });
+Route::get('/a', function() {
+    dd( request()->session()->all());
+});
+

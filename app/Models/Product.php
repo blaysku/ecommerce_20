@@ -38,9 +38,19 @@ class Product extends Model
         return $this->belongsTo(OrderItem::class, 'id', 'product_id');
     }
 
-    public function getProductWithFilter($categories, $price, $orderBy, $direction)
+    public function getProductWithFilter($keyword, $categories, $price, $orderBy, $direction)
     {
         $query = $this->select('id', 'name', 'image', 'price', 'avg_rating')->orderBy($orderBy ?: 'created_at', $direction ?: 'desc');
+
+        if ($keyword) {
+            $query->where(function ($subQuery) use ($keyword) {
+                $subQuery->whereHas('category', function ($q) use ($keyword) {
+                    $q->where('name', 'like', "%$keyword%");
+                })
+                    ->orWhere('name', 'like', "%$keyword%")
+                    ->orWhere('description', 'like', "%$keyword%");
+            });
+        }
 
         if ($price) {
             $query->whereBetween('price', $price);
@@ -57,5 +67,6 @@ class Product extends Model
     {
         $this->avg_rating = $this->ratings->avg('rating');
         $this->save();
+        return $this->avg_rating;
     }
 }

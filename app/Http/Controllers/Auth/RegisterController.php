@@ -30,7 +30,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
     protected $user;
 
     /**
@@ -77,7 +77,7 @@ class RegisterController extends Controller
         $data = [
             'confirmationCode' => $request->confirmation_code,
         ];
-        
+
         User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -88,8 +88,10 @@ class RegisterController extends Controller
             'confirmation_code' => $request->confirmation_code,
         ]);
 
-        Mail::send('auth.verify_email', $data, function ($message) use ($request) {
-            $message->to($request->email, $request->name)
+        $emailTo = $request->only('name', 'email');
+
+        Mail::queue('auth.verify_email', $data, function ($message) use ($emailTo) {
+            $message->to($emailTo['email'], $emailTo['name'])
                 ->subject(trans('authentication.verify_email_title'));
         });
 
@@ -105,12 +107,12 @@ class RegisterController extends Controller
     public function confirmEmail($confirmationCode)
     {
         if (!$confirmationCode) {
-            return redirect()->action('HomeController@index')->with('status', trans('authentication.incorrect_url'));
+            return redirect()->route('index')->with('status', trans('authentication.incorrect_url'));
         }
         $user = $this->user->getUserbyConfirmationCode($confirmationCode);
 
         if (!$user) {
-            return redirect()->action('HomeController@index')->with('status', trans('authentication.invalid_code'));
+            return redirect()->route('index')->with('status', trans('authentication.invalid_code'));
         }
 
         $user->status = config('setting.activated_user_status');
@@ -119,6 +121,6 @@ class RegisterController extends Controller
 
         $this->guard()->login($user);
 
-        return redirect()->action('HomeController@index')->with('status', trans('authentication.verify_success'));
+        return redirect()->route('index')->with('status', trans('authentication.verify_success'));
     }
 }

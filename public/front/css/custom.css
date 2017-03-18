@@ -26,8 +26,11 @@ input:disabled {
     background-color: #222;
 }
 .nav-cart .product-count {
-    background: #333;
-    position: static;
+    background: #069;
+    top: 5px;
+    right: 0;
+    font-size: 13px;
+    padding: 0;
 }
 .actions a:hover, .actions a:focus {
     text-decoration: none;
@@ -37,4 +40,7 @@ input:disabled {
 }
 .img-item {
     max-width: 50px;
+}
+.mainmenu-area ul.navbar-nav li.active a, .mainmenu-area ul.navbar-nav li:hover a {
+    background: #357ebd;
 }

@@ -1,4 +1,8 @@
 @extends('front.template')
+@section('css')
+    @parent
+    {!! HTML::style('/bower_components/jquery.rateit/scripts/rateit.css') !!}
+@endsection
 @section('title', trans('front.label.home-page'))
 @section('main')
     <div class="slider-area">
@@ -124,8 +128,8 @@
                                     <div class="product-f-image">
                                         <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}">
                                         <div class="product-hover">
-                                            <a href="#" class="add-to-cart-link"><i class="fa fa-shopping-cart"></i>{{ trans('front.label.add-to-cart') }}</a>
-                                            <a href="#" class="view-details-link"><i class="fa fa-link"></i>{{ trans('front.label.see-detail') }}</a>
+                                            <a href="#" class="add-to-cart-link" product-id = "{{ $product->id }}"><i class="fa fa-shopping-cart"></i>{{ trans('front.label.add-to-cart') }}</a>
+                                            <a href="{{ route('front.product.show', $product->id) }}" class="view-details-link"><i class="fa fa-link"></i>{{ trans('front.label.see-detail') }}</a>
                                         </div>
                                     </div>
                                     <div class="text-center">
@@ -172,11 +176,10 @@
                 <div class="col-md-4">
                     <div class="single-product-widget">
                         <h2 class="product-wid-title">{{ trans('front.label.top-sellers') }}</h2>
-                        <a href="" class="wid-view-more">{{ trans('front.label.view-all') }}</a>
                         @foreach ($topSellers as $product)
                             <div class="single-wid-product">
-                                <a href="#"><img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="product-thumb"></a>
-                                <h2><a href="#">{{ $product->name }}</a></h2>
+                                <a href="{{ route('front.product.show', $product->id) }}"><img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="product-thumb"></a>
+                                <h2><a href="{{ route('front.product.show', $product->id) }}">{{ $product->name }}</a></h2>
                                 <div class="rateit" data-rateit-value="{{ $product->avg_rating }}" data-rateit-readonly="true"></div>
                                 <div class="product-wid-price">
                                     <ins>{{ Format::currency($product->price) }}</ins>
@@ -188,11 +191,10 @@
                 <div class="col-md-4">
                     <div class="single-product-widget">
                         <h2 class="product-wid-title">{{ trans('front.label.top-rating') }}</h2>
-                        <a href="#" class="wid-view-more">{{ trans('front.label.view-all') }}</a>
                         @foreach ($topRatings as $product)
                             <div class="single-wid-product">
-                                <a href="#"><img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="product-thumb"></a>
-                                <h2><a href="#">{{ $product->name }}</a></h2>
+                                <a href="{{ route('front.product.show', $product->id) }}"><img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="product-thumb"></a>
+                                <h2><a href="{{ route('front.product.show', $product->id) }}">{{ $product->name }}</a></h2>
                                 <div class="rateit" data-rateit-value="{{ $product->avg_rating }}" data-rateit-readonly="true"></div>
                                 <div class="product-wid-price">
                                     <ins>{{ Format::currency($product->price) }}</ins>
@@ -204,11 +206,10 @@
                 <div class="col-md-4">
                     <div class="single-product-widget">
                         <h2 class="product-wid-title">{{ trans('front.label.top-new') }}</h2>
-                        <a href="#" class="wid-view-more">{{ trans('front.label.view-all') }}</a>
                         @foreach ($topNews as $product)
                             <div class="single-wid-product">
-                                <a href="#"><img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="product-thumb"></a>
-                                <h2><a href="#">{{ $product->name }}</a></h2>
+                                <a href="{{ route('front.product.show', $product->id) }}"><img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="product-thumb"></a>
+                                <h2><a href="{{ route('front.product.show', $product->id) }}">{{ $product->name }}</a></h2>
                                 <div class="rateit" data-rateit-value="{{ $product->avg_rating }}" data-rateit-readonly="true"></div>
                                 <div class="product-wid-price">
                                     <ins>{{ Format::currency($product->price) }}</ins>
@@ -221,3 +222,12 @@
         </div>
     </div> <!-- End product widget area -->
 @endsection
+@section('js')
+    @parent
+    {!! HTML::script('/bower_components/jquery.rateit/scripts/jquery.rateit.min.js') !!}
+    <script>
+        var data = {
+            addToCartRoute: "http://localhost:8000/product/add-to-cart",
+        };
+    </script>
+@stop

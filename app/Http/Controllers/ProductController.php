@@ -24,16 +24,58 @@ class ProductController extends Controller
         $this->product = $product;
     }
 
+    protected function filter($keyword, $category, $status, $quantity, $orderBy, $direction, $take)
+    {
+        $query = $this->product->query();
+
+        if (isset($category) && $category > 0) {
+            $query->where('category_id', $category);
+        }
+
+        if (isset($status)) {
+            $query->where('is_trending', $status);
+        }
+
+        if (isset($quantity)) {
+            $query->where('quantity', '<=', $quantity);
+        }
+
+        if ($keyword) {
+            $query->where(function ($subQuery) use ($keyword) {
+                $subQuery->whereHas('category', function ($q) use ($keyword) {
+                    $q->where('name', 'like', "%$keyword%");
+                })
+                    ->orwhere('name', 'like', "%$keyword%")
+                    ->orWhere('description', 'like', "%$keyword%")
+                    ->orWhere('id', $keyword);
+            });
+        }
+
+        return $query->orderBy($orderBy ?: 'id', $direction ?: 'desc')->paginate(($take && $take > 0) ? $take : config('setting.pagination_limit'));
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = $this->product->latest('is_trending')->latest()->paginate(config('setting.pagination_limit'));
-
-        return view('admin.products.index', compact('products'));
+        try {
+            $keyword = $request->get('keyword') == '' ? null : $request->get('keyword');
+            $category = $request->get('category') == '' ? null : $request->get('category');
+            $status = $request->get('status') == '' ? null : $request->get('status');
+            $quantity = $request->get('quantity') =='' ? null : $request->get('quantity');
+            $orderBy = $request->get('orderby') == '' ? null : $request->get('orderby');
+            $direction = $request->get('direction') == '' ? null : $request->get('direction');
+            $take = $request->get('take') == '' ? null : $request->get('take');
+            $categories = Category::where('parent_id', 0)->get();
+            $products = $this->filter($keyword, $category, $status, $quantity, $orderBy, $direction, $take);
+            $products->appends($request->except('page'));
+            return view('admin.products.index', compact('products'));
+        } catch (\Exception $e) {
+            return redirect()->route('product.index')->with(['message' => trans('admin.main.error'), 'level' => 'danger'])->withInput();
+        }
     }
 
     /**
@@ -204,6 +246,25 @@ class ProductController extends Controller
             DB::rollback();
 
             return redirect()->back()->with(['message' => trans('admin.main.error'), 'level' => 'danger']);
+        }
+    }
+
+    public function destroyMulti(Request $request)
+    {
+        if ($request->ajax()) {
+            DB::beginTransaction();
+            try {
+                $idArray = $request->get('id', null);
+
+                $this->product->whereIn('id', $idArray)->delete();
+                DB::commit();
+
+                return response()->json();
+            } catch (\Exception $e) {
+                DB::rollback();
+
+                return response()->json([trans('admin.main.error')], 400);
+            }
         }
     }
 }

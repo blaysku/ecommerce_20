@@ -37,6 +37,8 @@ $('#review-submit').on('click', function() {
         $(".rating, .review").removeClass('text-danger').find("p").empty();
         $("#edit").hide();
         $("#review-content").show().find("#content").html(data[0]);
+        $('#avg_rating').rateit('value', data[1]);
+        $('#rating_count').text('(' + data[2] + ' reviews)');
     })
     .fail(function(data) {
         var errors = data.responseJSON;

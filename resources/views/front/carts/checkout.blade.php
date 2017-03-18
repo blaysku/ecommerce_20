@@ -1,5 +1,9 @@
 @extends('front.template')
 @section('title', trans('front.label.checkout'))
+@section('css')
+    @parent
+    {!! HTML::style('/bower_components/jquery.rateit/scripts/rateit.css') !!}
+@endsection
 @section('main')
     @include('front.includes.title', ['title' => trans('front.label.checkout')])
     <div class="single-product-area">
@@ -166,5 +170,6 @@
             successMsg: '{{ trans('front.cart.placed') }}',
         }
     </script>
+    {!! HTML::script('/bower_components/jquery.rateit/scripts/jquery.rateit.min.js') !!}
     {{ HTML::script('front/js/checkout.js') }}
 @endsection

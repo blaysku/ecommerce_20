@@ -1,5 +1,9 @@
 @extends('front.template')
 @section('title', $user->name . '&#039;s ' . trans('front.account.wishlist'))
+@section('css')
+    @parent
+    {!! HTML::style('/bower_components/jquery.rateit/scripts/rateit.css') !!}
+@endsection
 @section('main')
     @include('front.includes.title', ['title' => $user->name . '&#039;s ' . trans('front.account.wishlist')])
     <div class="single-product-area">
@@ -128,5 +132,9 @@
             no: '{{ trans('admin.main.no') }}',
         }
     </script>
+<<<<<<< HEAD
+=======
+    {!! HTML::script('/bower_components/jquery.rateit/scripts/jquery.rateit.min.js') !!}
+>>>>>>> user suggest list
     {{ HTML::script('front/js/user-show.js') }}
 @endsection

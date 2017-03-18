@@ -29,12 +29,12 @@ class RatingController extends Controller
         if ($request->ajax()) {
             DB::beginTransaction();
             try {
-                $this->rating->create($request->all());
+                $rating = $this->rating->create($request->all());
                 $product = Product::findOrFail($request->get('product_id'));
-                $product->updateAvgRating();
+                $avgRating = $product->updateAvgRating();
                 DB::commit();
 
-                return response()->json();
+                return response()->json([$rating->review, $avgRating, $product->ratings->count()]);
             } catch (\Exception $e) {
                 DB::rollback();
 
@@ -59,10 +59,10 @@ class RatingController extends Controller
                 $rating->rating = $request->get('rating');
                 $rating->review = $request->get('review');
                 $rating->save();
-                $rating->product->updateAvgRating();
+                $avgRating = $rating->product->updateAvgRating();
                 DB::commit();
 
-                return response()->json([$rating->review]);
+                return response()->json([$rating->review, $avgRating, $rating->product->ratings->count()]);
             } catch (\Exception $e) {
                 DB::rollback();
 

@@ -2,72 +2,101 @@
 @section('main')
     @include('admin.partials.breadcrumb', ['title' => trans('admin.user.dashboard') . link_to_route('user.create', trans('admin.user.add'), [], ['class' => 'btn btn-info pull-right']), 'icon' => 'user', 'fil' => trans('admin.user.users')])
     @include('admin.partials.message')
-    <div id="tri" class="btn-group btn-group-sm">
-        <a href="{!! route('user.index') !!}" role="button" class="btn btn-default{{ CheckPath::classActiveOnlyPath('admin/user') }}">{{ trans('admin.user.all') }} 
-            <span class="badge">{{  $counts['total'] }}</span>
-        </a>
-        <a href="{!! route('user.index', 'admin') !!}" role="button" class="btn btn-default {{ CheckPath::classActiveOnlyPath('admin/user/admin') }}">{{ trans('admin.main.admin') }} 
-            <span class="badge">{{  $counts[config('setting.admin')] }}</span>
-        </a>
+    <div class="col-lg-12 well filter">
+        {!! Form::open(['method' => 'GET']) !!}
+            <div class="form-group col-md-6">
+                {!! Form::text('keyword', request()->get('keyword', null), [
+                    'class' => 'form-control',
+                    'placeholder' => trans('admin.filter.keyword'),
+                ]) !!}
+            </div>
+            <div class="col-md-3 form-group">
+                {!! Form::select('role', [
+                    null => trans('admin.filter.role'),
+                    1 => trans('admin.main.admin'), 0 => trans('admin.main.user')
+                ], request()->get('role', null), ['class' => 'form-control']) !!}
+            </div>
+            <div class="col-md-3 form-group">
+                {!! Form::select('status', [
+                    null => trans('admin.filter.status'),
+                    1 => trans('admin.user.active'),
+                    0 => trans('admin.user.not-active'),
+                ], request()->get('status', null), ['class' => 'form-control']) !!}
+            </div>
+            <div class="col-md-2 form-group">
+                {!! Form::select('orderby', [
+                    null => trans('admin.filter.orderby'),
+                    'id' => 'id',
+                    'name' => trans('admin.filter.name'),
+                ], request()->get('orderby', null), ['class' => 'form-control']) !!}
+            </div>
+            <div class="col-md-2 form-group">
+                {!! Form::select('direction', [
+                    null => trans('admin.filter.direction'),
+                    'asc' => trans('admin.filter.asc'),
+                    'desc' => trans('admin.filter.desc'),
+                ], request()->get('direction', null), ['class' => 'form-control']) !!}
+            </div>
+            <div class="col-md-2 form-group">
+                {!! Form::select('take', [
+                    null => trans('admin.filter.take'),
+                    10 => '10 ' . trans('admin.filter.records'),
+                    20 => '20 ' . trans('admin.filter.records'),
+                    50 => '50 ' . trans('admin.filter.records'),
+                ], request()->get('take', null), ['class' => 'form-control']) !!}
+            </div>
+            <div class="form-group col-md-2 pull-right">
+                {!! Form::submit(trans('admin.filter.filter'), ['class' => 'btn btn-primary pull-right']) !!}
+            </div>
+            <div class="form-group col-md-4 pull-right">
+                <div class="help-block pull-right" style="margin-top: 15px;">
+                    {{ trans('admin.filter.show') }}
+                    <strong>{{ $users->total() }}</strong>
+                    {{ trans('admin.filter.records') . ' ' . trans('admin.filter.in')
+                        . ' ' . $users->lastPage() . ' ' . trans('admin.filter.pages') }}
+                </div>
+            </div>
+        {!! Form::close() !!}
     </div>
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>{{ trans('admin.user.name') }}</th>
-                    <th>{{ trans('admin.user.email') }}</th>
-                    <th>{{ trans('admin.user.active') }}</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @include('admin.users.data')
-            </tbody>
-        </table>
-    </div>
-    <div class="pull-right link">{!! $users->links() !!}</div>
+    @if (count($users))
+        <div class="table-responsive col-lg-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>{!! Form::checkbox('selectall', null, false, ['id' => 'selectall']) !!}</th>
+                        <th>ID</th>
+                        <th>{{ trans('admin.user.name') }}</th>
+                        <th>{{ trans('admin.user.email') }}</th>
+                        <th>{{ trans('admin.user.active') }}</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @include('admin.users.data')
+                </tbody>
+            </table>
+        </div>
+        <div class="pull-right link">{!! $users->links() !!}</div>
+    @else
+        <h2 class="text-center">{{ trans('admin.filter.nothing') }}</h2>
+    @endif
 @endsection
 @section('js')
     @parent
     <script>
-        $(function() {
-            // change user status
-            $(document).on('change', ':checkbox', function() {
-                $(this).parents('tr').toggleClass('warning');
-                $(this).hide().parent().append('<i class="fa fa-refresh fa-spin"></i>');
-                $.ajax({
-                    url: '{!! route('user.status', '') !!}' + '/' + this.value,
-                    type: 'PUT',
-                    data: "status=" + this.checked
-                })
-                .done(function() {
-                    $('.fa-spin').remove();
-                    $('input[type="checkbox"]:hidden').show();
-                })
-                .fail(function() {
-                    $('.fa-spin').remove();
-                    var chk = $('input[type="checkbox"]:hidden');
-                    chk.show().prop('checked', chk.is(':checked') ? null : 'checked').parents('tr').toggleClass('warning');
-                    swal('{{ trans('admin.user.fail') }}');
-                });
-            });
-            //destroy user event
-            $('.btn-destroy').on('click',function(e){
-                e.preventDefault();
-                var form = $(this).parents('form');
-                swal({
-                    title: $(this).attr('data-title'),
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "{!! trans('admin.main.yes') !!}",
-                    cancelButtonText: "{!! trans('admin.main.no') !!}"
-                }, function(isConfirm){
-                    if (isConfirm) form.submit();
-                });
-            });
-        });
+        var info = {
+            routeUserStatus: '{!! route('user.status', '') !!}',
+            userFailMsg: '{{ trans('admin.user.fail') }}',
+            activeAllUser: '{{ trans('admin.user.active-all') }}',
+            deactiveAllUser: '{{ trans('admin.user.deactive-all') }}',
+            destroyAllUser: '{{ trans('admin.user.destroy-all') }}',
+            userDestroyMulti: '{{ route('user.destroy.multi') }}',
+            changeStatusMulti: '{{ route('user.status.multi') }}',
+            successMsg: '{{ trans('admin.main.success') }}',
+        };
     </script>
+    {{ HTML::script('/js/user.js') }}
+    {{ HTML::script('/js/select-checkbox.js') }}
 @endsection

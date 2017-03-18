@@ -20,7 +20,8 @@ $(function() {
         data: [0, 0],
         xkey: 'date',
         ykeys: ['value'],
-        labels: ['Orders']
+        labels: ['Orders'],
+        resize: true
     });
     requestData(7, chart);
     $('ul.ranges a').click(function(e) {

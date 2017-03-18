@@ -24,35 +24,44 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $category = $request->get('category') ?: null;
-        $price = $request->get('price') ?: null;
-        $orderBy = $request->get('orderby') ?: null;
-        $direction = $request->get('direction') ?: null;
+        try {
+            $keyword = $request->get('keyword') == '' ? null : $request->get('keyword');
+            $category = $request->get('category') == '' ? null : $request->get('category');
+            $price = $request->get('price') == '' ? null : $request->get('price');
+            $orderBy = $request->get('orderby') == '' ? null : $request->get('orderby');
+            $direction = $request->get('direction') == '' ? null : $request->get('direction');
 
-        if ($request->ajax()) {
-            $price = explode(',', $request->get('price'));
-            $products = $this->product->getProductWithFilter($category, $price, $orderBy, $direction);
+            if ($request->ajax()) {
+                $price = explode(',', $request->get('price'));
+                $products = $this->product->getProductWithFilter($keyword, $category, $price, $orderBy, $direction);
 
-            return [
-                'view' => view('front.products.data', compact('products'))->render(),
-                'links' => e($products->appends([
-                    'category' => $category,
-                    'price' => $price,
-                    'orderby' => $orderBy,
-                    'direction' => $direction,
-                ])->links()),
-            ];
+                return [
+                    'view' => view('front.products.data', compact('products'))->render(),
+                    'links' => e($products->appends([
+                        'keyword' => $keyword,
+                        'category' => $category,
+                        'price' => $price,
+                        'orderby' => $orderBy,
+                        'direction' => $direction,
+                    ])->links()),
+                ];
+            }
+
+            $products = $this->product->getProductWithFilter($keyword, $category, $price, $orderBy, $direction);
+            $links = $products->appends([
+                'keyword' => $keyword,
+                'category' => $category,
+                'price' => $price,
+                'orderby' => $orderBy,
+                'direction' => $direction,
+            ])->links();
+
+            return view('front.products.index', compact('products', 'links'));
+        } catch (\Exception $e) {
+            $products = $links = null;
+
+            return view('front.products.index', compact('products', 'links'));
         }
-
-        $products = $this->product->getProductWithFilter($category, $price, $orderBy, $direction);
-        $links = $products->appends([
-            'category' => $category,
-            'price' => $price,
-            'orderby' => $orderBy,
-            'direction' => $direction,
-        ])->links();
-
-        return view('front.products.index', compact('products', 'links'));
     }
 
     /**

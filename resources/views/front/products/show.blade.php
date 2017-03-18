@@ -1,5 +1,9 @@
 @extends('front.template')
 @section('title', $product->name)
+@section('css')
+    @parent
+    {!! HTML::style('/bower_components/jquery.rateit/scripts/rateit.css') !!}
+@endsection
 @section('main')
     @include('front.includes.title', ['title' => $product->name])
     <div class="single-product-area">
@@ -54,8 +58,8 @@
                             <div class="col-sm-6">
                                 <div class="product-inner">
                                     <h2 class="product-name">{{ $product->name }}</h2>
-                                    <div class="rateit" data-rateit-value="{{ $product->avg_rating }}" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
-                                    <small>({{ $product->ratings->count() . ' ' . strtolower(trans('front.label.reviews')) }})</small>
+                                    <div class="rateit" data-rateit-value="{{ $product->avg_rating }}" data-rateit-readonly="true" id="avg_rating"></div>
+                                    <small id="rating_count">({{ $product->ratings->count() . ' ' . strtolower(trans('front.label.reviews')) }})</small>
                                     <div class="product-inner-price">
                                         <ins>{{ Format::currency($product->price) }}</ins>
                                     </div>
@@ -102,10 +106,10 @@
                                                             <div class="review">
                                                                 <label for="review">{{ trans('front.label.your-review') }}</label>
                                                                 <div id="review-content">
+                                                                    <div id="content">
+                                                                        {!! ($userRating && $userRating->review) ? $userRating->review : null !!}
+                                                                    </div>
                                                                     @if ($userRating && $userRating->review)
-                                                                        <div id="content">
-                                                                            {!! $userRating->review !!}
-                                                                        </div>
                                                                         <a href="#" id="edit-review"><i class="fa fa-pencil"></i></a>
                                                                     @endif
                                                                 </div>
@@ -171,6 +175,7 @@
             'restAmount': '{{ isset($restAmount) ? $restAmount : null }}',
         }
     </script>
+    {!! HTML::script('/bower_components/jquery.rateit/scripts/jquery.rateit.min.js') !!}
     {{ HTML::script('front/js/bootstrap-minus-plus.js') }}
     {{ HTML::script('front/js/product-show.js') }}
     {{ HTML::script('front/js/facebook.js') }}

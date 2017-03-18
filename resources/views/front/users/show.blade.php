@@ -1,5 +1,9 @@
 @extends('front.template')
 @section('title', $user->name . '&#039;s ' . trans('front.user.profile'))
+@section('css')
+    @parent
+    {!! HTML::style('/bower_components/jquery.rateit/scripts/rateit.css') !!}
+@endsection
 @section('main')
     @include('front.includes.title', ['title' => $user->name . '&#039;s ' . trans('front.user.profile')])
     <div class="single-product-area">
@@ -79,7 +83,11 @@
                                         <a class="btn btn-primary see-order" href='#'>
                                             <i class="fa fa-fw fa-eye"></i> {{ trans('front.user.order-history') }}
                                         </a>
+<<<<<<< HEAD
                                         <a class="btn btn-primary" href="{{ route('front.user.suggest', $user->id) }}">
+=======
+                                        <a class="btn btn-primary" href='{{ route('front.user.suggest', $user->id) }}'>
+>>>>>>> user suggest list
                                             <i class="fa fa-fw fa-lightbulb-o"></i>{{ trans('front.account.wishlist') }}
                                         </a>
                                         <div class="modal fade" id="modal-id">
@@ -206,5 +214,6 @@
             no: '{{ trans('admin.main.no') }}',
         }
     </script>
+    {!! HTML::script('/bower_components/jquery.rateit/scripts/jquery.rateit.min.js') !!}
     {{ HTML::script('front/js/user-show.js') }}
 @endsection

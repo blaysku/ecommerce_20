@@ -1,6 +1,6 @@
 $(function() {
     // change user status
-    $(document).on('change', ':checkbox', function() {
+    $(document).on('change', ':checkbox.product-status', function() {
         $(this).parents('tr').toggleClass('warning');
         $(this).hide().parent().append('<i class="fa fa-refresh fa-spin"></i>');
         $.ajax({
@@ -47,3 +47,31 @@ $('.page-header #import').on('click', function(e) {
             window.location.href = $('.page-header a').attr('href');
     });
 })
+$('#destroy-all').on('click', function (e) {
+    e.preventDefault();
+    var id = [];
+    $('.select:checked').each(function(i){
+      id[i] = $(this).val();
+    });
+    swal({
+        title: data['deleteAll'],
+        type: 'warning',
+        showCancelButton: true,
+    }, function(isConfirm){
+        if (isConfirm) {
+            $.ajax({
+                url: data['destroy_all'],
+                type: 'POST',
+                data: {id},
+            })
+            .done(function() {
+                swal(data['successMsg']);
+                location.reload();
+            })
+            .fail(function(error) {
+                var errors = error.responseJSON;
+                swal(errors[0]);
+            })
+        }
+    });
+});

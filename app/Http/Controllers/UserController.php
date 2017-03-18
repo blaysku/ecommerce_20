@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
 use Illuminate\Support\Facades\Storage;
+use DB;
+use Auth;
 
 class UserController extends Controller
 {
@@ -21,12 +23,23 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($role = null)
+    public function index(Request $request, $role = null)
     {
-        $users = $this->user->getUserByRole($role);
-        $counts = $this->user->countUser();
+        try {
+            $keyword = $request->get('keyword') == '' ? null : $request->get('keyword');
+            $role = $request->get('role') == '' ? null : $request->get('role');
+            $status = $request->get('status') == '' ? null : $request->get('status');
+            $orderBy = $request->get('orderby') == '' ? null : $request->get('orderby');
+            $direction = $request->get('direction') == '' ? null : $request->get('direction');
+            $take = $request->get('take') == '' ? null : $request->get('take');
 
-        return view('admin.users.index', compact('users', 'counts'));
+            $users = $this->user->filter($keyword, $role, $status, $orderBy, $direction, $take);
+            $users->appends($request->except('page'));
+
+            return view('admin.users.index', compact('users'));
+        } catch (\Exception $e) {
+            return redirect()->route('user.index')->with(['message' => trans('admin.main.error'), 'level' => 'danger'])->withInput();
+        }
     }
 
     /**
@@ -173,6 +186,48 @@ class UserController extends Controller
             }
 
             return response()->json([], 400);
+        }
+    }
+
+    public function changeStatusMultiUser(Request $request)
+    {
+        if ($request->ajax()) {
+            DB::beginTransaction();
+            try {
+                $idArray = $request->get('id', null);
+                if ($request->get('status') == 0 && in_array(Auth::user()->id, $idArray)) {
+                    return response()->json(["Can't deactive yourself!"], 400);
+                }
+                $this->user->whereIn('id', $idArray)->update(['status' => $request->get('status')]);
+                DB::commit();
+
+                return response()->json();
+            } catch (\Exception $e) {
+                DB::rollback();
+
+                return response()->json(['error' => trans('admin.main.error')], 400);
+            }
+        }
+    }
+
+    public function destroyMultiUser(Request $request)
+    {
+        if ($request->ajax()) {
+            DB::beginTransaction();
+            try {
+                $idArray = $request->get('id', null);
+                if (in_array(Auth::user()->id, $idArray)) {
+                    return response()->json([trans('admin.user.delete-fail')], 400);
+                }
+                $this->user->whereIn('id', $idArray)->delete();
+                DB::commit();
+
+                return response()->json();
+            } catch (\Exception $e) {
+                DB::rollback();
+
+                return response()->json([trans('admin.main.error')], 400);
+            }
         }
     }
 }

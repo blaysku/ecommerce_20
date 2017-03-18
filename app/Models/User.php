@@ -91,4 +91,29 @@ class User extends Authenticatable
 
         return $query->paginate($n ? $n : config('setting.pagination_limit'));
     }
+
+    public function filter($keyword, $role, $status, $orderBy, $direction, $take)
+    {
+        $query = $this->query();
+
+        if (isset($role)) {
+            $query->where('is_admin', $role);
+        }
+
+        if (isset($status)) {
+            $query->where('status', $status);
+        }
+
+        if ($keyword) {
+            $query->where(function ($subQuery) use ($keyword) {
+                $subQuery->where('name', 'like', "%$keyword%")
+                    ->orWhere('id', $keyword)
+                    ->orWhere('email', 'like', "%$keyword%")
+                    ->orWhere('phone', 'like', "%%$keyword%")
+                    ->orWhere('address', 'like', "%$keyword%");
+            });
+        }
+
+        return $query->orderBy($orderBy ?: 'id', $direction ?: 'desc')->paginate(($take && $take > 0) ? $take : config('setting.pagination_limit'));
+    }
 }

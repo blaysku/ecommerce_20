@@ -32,7 +32,6 @@ return [
         'error' => 'Errors occurred',
         'created_at' => 'Created at',
         'updated_at' => 'Updated at',
-        'success' => 'Success',
     ],
     'dashboard' => [
         'user-today' => 'Users register today',
@@ -88,9 +87,6 @@ return [
         'create-user' => 'Create User',
         'edit-user' => 'Edit User',
         'keep-password' => 'Leave this field blank to keep current password',
-        'active-all' => 'Active all selected user?',
-        'deactive-all' => 'Deactive all selected user?',
-        'destroy-all' => 'Destroy all selected user?',
     ],
     'category' => [
         'dashboard' => 'Categories manager',
@@ -129,7 +125,6 @@ return [
         'import-confirm' => 'Import all to database?',
         'import' => 'Import to database',
         'imported' => 'Data imported.',
-        'delete-all' => 'Delete all selected items?',
     ],
     'order' => [
         'dashboard' => 'Order manager',
@@ -149,8 +144,6 @@ return [
         'created_at' => 'Create at',
         'total' => 'Total',
         'success' => 'Successful',
-        'paid' => 'These orders have been paid?',
-        'not-paid' => 'These orders have not been paid?',
     ],
     'suggest' => [
         'dashboard' => 'Suggest manager',
@@ -167,27 +160,5 @@ return [
         'reject-warning' => 'Reject this suggest?',
         'rejected' => 'You have rejected this suggest!',
         'created' => 'Create new products successfully with suggestion',
-    ],
-    'filter' => [
-        'keyword' => 'type keyword...',
-        'role' => '--role--',
-        'status' => '--status--',
-        'orderby' => '--order by--',
-        'name' => 'name',
-        'direction' => '--direction--',
-        'asc' => 'ascending',
-        'desc' => 'descending',
-        'take' => '--take--',
-        'records' => 'records',
-        'filter' => 'Filter',
-        'show' => 'Showing',
-        'in' => 'in',
-        'pages' => 'pages',
-        'nothing' => 'Nothing found!',
-        'trending' => 'trending',
-        'not-trending' => 'not trending',
-        'sold-out' => 'Sold out',
-        'less-than' => 'Less than',
-
     ],
 ];

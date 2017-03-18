@@ -17,15 +17,15 @@
                         </tr>
                         <tr>
                             <th>{{ trans('admin.order.customer-name') }}</th>
-                            <td>{{ $order->name }}</td>
+                            <td>{{ $order->name or $order->user->name }}</td>
                         </tr>
                         <tr>
                             <th>{{ trans('admin.order.customer-phone') }}</th>
-                            <td>{{ $order->phone }}</td>
+                            <td>{{ $order->phone or $order->user->phone}}</td>
                         </tr>
                         <tr>
                             <th>{{ trans('admin.order.customer-address') }}</th>
-                            <td>{{ $order->address }}</td>
+                            <td>{{ $order->address or $order->user->address }}</td>
                         </tr>
                         <tr>
                             <th>{{ trans('admin.order.status') }}</th>

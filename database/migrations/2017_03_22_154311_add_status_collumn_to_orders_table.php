@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateOrdersTable extends Migration
+class AddStatusCollumnToOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class UpdateOrdersTable extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('status');
-            // $table->tinyInteger('status')->default(0);
+            $table->tinyInteger('status')->default(0);
         });
     }
 
@@ -27,7 +26,7 @@ class UpdateOrdersTable extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->string('status');
+            $table->dropColumn('status');
         });
     }
 }

@@ -1,3 +1,32 @@
+{!! HTML::script('/bower_components/jquery-legacy/dist/jquery.min.js') !!}
+{!! HTML::script('/bower_components/jquery.rateit/scripts/jquery.rateit.min.js') !!}
+<script type="text/javascript">
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $('.add_to_cart_button, .add-to-cart-link').on('click', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url:  data['addToCartRoute'] + '/' + $(this).attr('product-id'),
+            type: 'POST',
+            data: {
+                quantity: $(this).parent().find('.input-number').val() ? $(this).parent().find('.input-number').val() : 1,
+            },
+        })
+        .done(function(data) {
+            $('span.cart-amunt, .nav-cart span').text(data['totalPrice']);
+            $('span.product-count').text(data['totalItems']);
+            $('input[name="quantity"]').attr('max', data['restAmount']);
+            $('.remainder ins').text(data['restAmount']);
+        })
+        .fail(function(data) {
+            var error = data.responseJSON;
+            alert(error['error']);
+        })
+    });
+</script>
 @if (count($products))
     @foreach ($products as $product)
         <div class="col-md-3 col-sm-6">

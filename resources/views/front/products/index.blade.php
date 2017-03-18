@@ -4,7 +4,7 @@
     @parent
     {!! HTML::style('/bower_components/bootstrap-select/dist/css/bootstrap-select.min.css') !!}
     {!! HTML::style('/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css') !!}
-    {!! HTML::style('/bower_components/sweetalert/dist/sweetalert.css') !!}
+    {!! HTML::style('/bower_components/jquery.rateit/scripts/rateit.css') !!}
 @endsection
 @section('main')
 @include('front.includes.title', ['title' => trans('front.label.shop-page')])
@@ -15,7 +15,10 @@
                 <!-- filter bar -->
                 <div class="col-md-12 well filter">
                     {!! Form::open(['route' => 'front.product.index', 'id' => 'filter']) !!}
-                        <div class="col-md-3">
+                        <div class="col-md-2 form-group">
+                            {!! Form::text('keyword', request()->get('keyword', null), ['placeholder' => 'Type keyword', 'id' => 'keyword']) !!}
+                        </div>
+                        <div class="col-md-2 form-group">
                             <select id ="category" name="category[]" class="form-control selectpicker" multiple title="{{ trans('front.filter.select-category') }}" data-actions-box="true">
                                 @foreach ($categories as $category)
                                     <optgroup label="{{ $category->name }}">
@@ -26,10 +29,10 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3 form-group">
                             <input id="price" type="text" name="price"/>
                        </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 form-group">
                             <select name="orderby" class="form-control selectpicker" title="{{ trans('front.filter.order') }}" id="orderby">
                                 <option value="name" {{ request()->orderby == 'name' ? 'selected' : ''}}>{{ trans('front.filter.order-name') }}</option>
                                 <option value="price" {{ request()->orderby == 'price' ? 'selected' : ''}}>{{ trans('front.filter.order-price') }}</option>
@@ -37,13 +40,13 @@
                                 <option value="avg_rating" {{ request()->orderby == 'avg_rating' ? 'selected' : ''}}>{{ trans('front.filter.order-rating') }}</option>
                             </select>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 form-group">
                             <select name="direction" class="form-control selectpicker" title="{{ trans('front.filter.direction') }}" id="direction">
                                 <option value="asc" {{ request()->direction == 'asc' ? 'selected' : ''}}>{{ trans('front.filter.sort-asc') }}</option>
                                 <option value="desc" {{ request()->direction == 'desc' ? 'selected' : ''}}>{{ trans('front.filter.sort-desc') }}</option>
                             </select>
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-md-1 form-group">
                             {!! Form::submit(trans('front.filter.filter'), ['class' => 'btn btn-primary']) !!}
                         </div>
                     {!! Form::close() !!}
@@ -124,7 +127,6 @@
     {!! HTML::script('/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js') !!}
     {!! HTML::script('/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js') !!}
     {{ HTML::script('bower_components/ckeditor/ckeditor.js') }}
-    {!! HTML::script('/front/js/product-page.js') !!}
     <script>
         var data = {
             error: '{!! trans('admin.main.error') !!}',
@@ -134,4 +136,5 @@
             successMsg: '{{ trans('front.suggest.thanks') }}'
         };
     </script>
+    {!! HTML::script('/front/js/product-page.js') !!}
 @endsection

@@ -129,6 +129,11 @@ class CartController extends Controller
             });
 
 
+            Mail::queue('front.orders.order-email', ['order' => $order], function ($message) {
+                $message->to(Auth::user()->email, Auth::user()->name)
+                    ->subject(trans('front.cart.mail-subject'));
+            });
+
             return response()->json();
         } catch (\Exception $e) {
             DB::rollback();

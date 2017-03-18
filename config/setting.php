@@ -29,6 +29,7 @@ return [
     'sugget_waiting' => 0,
     'sugget_accept' => 1,
     'sugget_reject' => 2,
+    'default_day_stats' => 7,
     'facebook_app_id' => env('FACEBOOK_APP_ID', '654988298038475'),
     'front' => [
         'home-limit-take' => 3,

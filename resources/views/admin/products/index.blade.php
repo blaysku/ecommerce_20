@@ -51,7 +51,7 @@
                         <td>{{ $product->price }}</td>
                         <td>{{ $product->quantity }}</td>
                         <td>{!! Form::checkbox('is_trending', $product->id, $product->is_trending) !!}</td>
-                        <td>{!! link_to_route('product.index', trans('admin.user.see'), [$product->id], ['class' => 'btn btn-success btn-block']) !!}</td>
+                        <td>{!! link_to_route('front.product.show', trans('admin.user.see'), [$product->id], ['class' => 'btn btn-success btn-block']) !!}</td>
                         <td>{!! link_to_route('product.edit', trans('admin.user.edit'), [$product->id], ['class' => 'btn btn-warning btn-block']) !!}</td>
                         <td>
                             {!! Form::open(['method' => 'DELETE', 'route' => ['product.destroy', $product->id]]) !!}

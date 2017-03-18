@@ -70,6 +70,11 @@ return [
         'my-account' => 'My account',
         'wishlist' => 'Wishlist',
     ],
+    'suggest' => [
+        'thanks' => 'Thanks for your suggestion!',
+        'back-to-product' => 'Back to product page',
+        'suggest' => 'Suggest new product',
+    ],
     'cart' => [
         'cart' => 'Cart',
         'my-cart' => 'My cart',

@@ -48,4 +48,5 @@ Route::group(['as' => 'front.'], function () {
     Route::post('user', 'Front\UserController@update')->name('user.update');
     Route::resource('user', 'Front\UserController', ['only' => 'show']);
     Route::resource('order', 'Front\OrderController', ['only' => ['show', 'update']]);
+    Route::post('suggest', 'Front\SuggestController')->name('suggest');
 });

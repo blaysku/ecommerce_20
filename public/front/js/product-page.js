@@ -22,3 +22,36 @@ $('#filter').submit(function (e) {
         swal(data['error']);
     });
 });
+var config = {
+    toolbar : [
+        { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'CopyFormatting', 'RemoveFormat' ] },
+    ]
+};
+CKEDITOR.replace( 'description', config);
+$('#submit').click(function() {
+    var formData = new FormData($("#suggest-data")[0]);
+    formData.set('description', CKEDITOR.instances.description.getData());
+    $.ajax({
+        url: data['suggestUrl'],
+        data: formData,
+        dataType: 'json',
+        async: false,
+        type: 'POST',
+        processData: false,
+        contentType: false,
+    })
+    .done(function() {
+        swal({
+            title: '',
+            text: data['successMsg'],
+            type: 'success',
+        });
+    })
+    .fail(function(data) {
+        var errors = data.responseJSON;
+        $('.form-group').removeClass('has-error').find('small').empty();
+        $.each(errors, function(index, error) {
+            $('#' + index).parents('.form-group').addClass('has-error').find('small').text(error[0]);
+        });
+    });
+});

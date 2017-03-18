@@ -4,6 +4,7 @@ $('#diff-check').on('change', function() {
 
 $('#place_order').on('click', function(e) {
     e.preventDefault();
+    swal('', info['waitingMsg']);
     $.ajax({
             url: info['checkoutUrl'],
             type: 'POST',

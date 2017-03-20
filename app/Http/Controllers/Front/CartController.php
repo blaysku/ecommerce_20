@@ -85,9 +85,8 @@ class CartController extends Controller
 
     public function showCheckout(Request $request)
     {
-        $trendingProducts = Product::whereIsTrending(config('setting.trending_product'))->take(config('setting.front.limit'))->get();
         $cart = $request->session()->get('cart', null);
-        return view('front.carts.checkout', compact('cart', 'trendingProducts'));
+        return view('front.carts.checkout', compact('cart'));
     }
 
     public function checkout(CheckoutRequest $request)
@@ -100,16 +99,23 @@ class CartController extends Controller
                 'total_price' => $cart->totalPrice,
                 'status' => config('setting.waiting_order'),
             ]);
+
+            foreach ($orderDetail as $key => $value) {
+                if (!$value) {
+                    unset($orderDetail[$key]);
+                }
+            }
+
             $orderItems = [];
 
-            foreach ($cart->items as $productId => $product) {
-                $orderproducts[] = [
+            foreach ($cart->items as $productId => $item) {
+                $orderItems[] = [
                     'product_id' => $productId,
-                    'quantity' => $product['quantity'],
-                    'price' => $product['price'],
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price'],
                 ];
 
-                Product::find($productId)->update(['quantity' => $product['restAmount']]);
+                Product::find($productId)->update(['quantity' => $item['restAmount']]);
             }
 
             $order = Order::create($orderDetail);

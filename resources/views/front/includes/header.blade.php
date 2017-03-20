@@ -20,8 +20,9 @@
                             </ul>
                             @if (auth()->user())
                                 <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-user"></span> {{ auth()->user()->name }}<b class="caret"></b></a>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-fw fa-user"></span> {{ auth()->user()->name }}<b class="caret"></b></a>
                                     <ul class="dropdown-menu">
+                                        <li><a href="{{ route('front.user.show', auth()->id()) }}"><span class="fa fa-fw fa-user"></span> {{ trans('front.account.my-account') }}</a></li>
                                         <li>
                                             <a href="{{ route('logout') }}" id="logout" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                                                 <span class="fa fa-fw fa-power-off"></span>

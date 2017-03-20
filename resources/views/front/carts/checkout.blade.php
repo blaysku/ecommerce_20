@@ -84,7 +84,7 @@
                                     </div>
                                 </div>
                             @endif
-                            @if (!$cart)
+                            @if (!$cart || !$cart->items)
                                 <h3 class="text-center">({{ trans('front.cart.empty') }})</h3>
                             @else
                                 <h3 id="order_review_heading">{{ trans('front.cart.your-order') }}</h3>

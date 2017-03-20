@@ -60,6 +60,62 @@
                     </div>
                 </div>
             </div>
+            @if (Auth::check())
+                <div class="modal fade" id="suggest-form">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title">{{ trans('front.suggest.suggest') }}</h4>
+                            </div>
+                            <div class="modal-body">
+                                {!! Form::open(['class' => 'form-horizontal', 'id' => 'suggest-data']) !!}
+                                    <div class="form-group">
+                                        {!! Form::label('image', trans('admin.product.image'), ['class' => 'control-label col-lg-3']) !!}
+                                        <div class="col-lg-8">
+                                            {!! Form::file('image', []) !!}
+                                            <small class="help-block"></small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        {!! Form::label('name', trans('admin.product.name'), ['class' => 'control-label col-lg-3']) !!}
+                                        <div class="col-lg-8">
+                                            {!! Form::text('name', null, ['class' => 'form-control']) !!}
+                                            <small class="help-block"></small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        {!! Form::label('category_id', trans('admin.product.category'), ['class' => 'control-label col-lg-3']) !!}
+                                        <div class="col-lg-8">
+                                            <select name="category_id" class="form-control">
+                                                @foreach ($categories as $category)
+                                                    <optgroup label="{{ $category->name }}">
+                                                        @foreach ($category->childrens as $children)
+                                                            <option value="{{ $children->id }}">{{ $children->name }}</option>
+                                                        @endforeach
+                                                    </optgroup>
+                                                @endforeach
+                                            </select>
+                                            <small class="help-block"></small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        {!! Form::label('description', trans('admin.product.description'), ['class' => 'control-label col-lg-3']) !!}
+                                        <div class="col-lg-8">
+                                            {!! Form::textarea('description', null, ['class' => 'form-control']) !!}
+                                            <small class="help-block"></small>
+                                        </div>
+                                    </div>
+                                {!! Form::close() !!}
+                            </div>
+                            <div class="modal-footer">
+                                {!! Form::button(trans('front.label.close'), ['class' => 'btn btn-default', 'data-dismiss' => 'modal']) !!}
+                                {!! Form::button(trans('admin.main.submit'), ['class' => 'btn btn-primary', 'id' => 'submit']) !!}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 @endsection
@@ -67,12 +123,15 @@
     @parent
     {!! HTML::script('/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js') !!}
     {!! HTML::script('/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js') !!}
+    {{ HTML::script('bower_components/ckeditor/ckeditor.js') }}
     {!! HTML::script('/front/js/product-page.js') !!}
     <script>
         var data = {
             error: '{!! trans('admin.main.error') !!}',
             value: [{{ request()->price ? request()->price[0] . ',' . request()->price[1] : '0, 10000' }}],
-            addToCartRoute: "{{ route('front.product.addToCart', '') }}",
+            addToCartRoute: '{{ route('front.product.addToCart', '') }}',
+            suggestUrl: '{{ route('front.suggest') }}',
+            successMsg: '{{ trans('front.suggest.thanks') }}'
         };
     </script>
 @endsection

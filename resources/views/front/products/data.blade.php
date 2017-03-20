@@ -19,7 +19,15 @@
 @else
     <div class="panel panel-default">
         <div class="panel-body">
-            <p class="text-center">{{ trans('front.label.nothing') }}</p>
+            <h3 class="text-center">{{ trans('front.label.nothing') }}</h3>
+            <h4 class="text-center">
+                <a href="{{ route('index') }}"><i class="fa fa-fw fa-home"></i>{{ trans('front.label.home-page') }}</a>
+                <a href="{{ route('front.product.index') }}"><i class="fa fa-fw fa-cart-plus"></i>{{ trans('front.suggest.back-to-product') }}</a>
+                @if (Auth::check())
+                    <a  data-toggle="modal" href='#suggest-form'><i class="fa fa-fw fa-lightbulb-o"></i>{{ trans('front.suggest.suggest') }}</a>
+                @endif
+            </h4>
         </div>
     </div>
 @endif
+

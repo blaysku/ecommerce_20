@@ -12,13 +12,13 @@ class SuggestsTableSeeder extends Seeder
     public function run()
     {
         $faker = Faker\Factory::create();
-        for ($i = 1; $i < 11; $i++) {
+        for ($i = 1; $i < 20; $i++) {
             DB::table('suggests')->insert([
-                'user_id' => rand(1, 3),
-                'category_id' => rand(4, 12),
+                'user_id' => rand(1, 20),
+                'category_id' => rand(6, 14),
                 'name' => $faker->name,
                 'description' => $faker->text($maxNbChars = 200),
-                'status' => rand(0, 1),
+                'status' => rand(0, 2),
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime(),
             ]);

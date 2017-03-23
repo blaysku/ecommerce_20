@@ -20,7 +20,7 @@ class OrdersTableSeeder extends Seeder
                 'phone' => $faker->phoneNumber,
                 'address' => $faker->address,
                 'total_price' => rand(1000, 2000),
-                'status' => ['done', 'waiting', 'cancel'][rand(0,2)],
+                'status' => rand(0, 2),
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime(),
             ]);

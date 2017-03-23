@@ -13,9 +13,8 @@ class CategoriesTableSeeder extends Seeder
     {
         $faker = Faker\Factory::create();
 
-        for ($i = 1; $i < 5; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             DB::table('categories')->insert([
-                'level' => 1,
                 'parent_id' => 0,
                 'name' => $faker->name,
                 'created_at' => new DateTime(),
@@ -25,7 +24,6 @@ class CategoriesTableSeeder extends Seeder
 
         for ($i = 1; $i < 10; $i++) {
             DB::table('categories')->insert([
-                'level' => 2,
                 'parent_id' => $faker->numberBetween(1, 5),
                 'name' => $faker->name,
                 'created_at' => new DateTime(),
